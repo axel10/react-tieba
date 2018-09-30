@@ -1,0 +1,119 @@
+@import "../../var";
+
+.IndexTabs {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  .search {
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    padding-left: $paddingLeftRight;
+    color: #999;
+  }
+  .myTieba{
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #fff;
+    padding: 0 1rem 1rem;
+    .top{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    ul{
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      li{
+        width: 42%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 2rem;
+        margin-bottom: .5rem;
+      }
+    }
+    .open{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+  .interest {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    //padding: 0 $paddingLeftRight;
+    background-color: #fff;
+    height: 13rem;
+    .top {
+      height: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 1rem;
+      .left {
+        color: #999;
+        font-size: .8rem;
+      }
+      .right {
+        color: $mainColor;
+      }
+    }
+    .items {
+      box-sizing: border-box;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      ul {
+        box-sizing: border-box;
+        width: 100%;
+        position: absolute;
+        li {
+          width: 100%;
+          box-sizing: border-box;
+          padding: 0 1rem;
+          transition: transform .5s;
+          display: none;
+          justify-content: flex-start;
+          align-items: center;
+          height: 3.5rem;
+          .headImg {
+            width: 3rem;
+            height: 3rem;
+            background-color: #cccccc;
+          }
+          .info {
+            margin-left: .5rem;
+            display: flex;
+            flex-direction: column;
+            .title {
+              font-size: .9rem;
+            }
+            .count {
+              color: #999999;
+              font-size: .8rem;
+            }
+          }
+          .follow {
+            border-radius: 2px;
+            border: 1px solid $mainColor;
+            padding: .5rem .9rem;
+            color: $mainColor;
+            margin-left: auto;
+          }
+        }
+      }
+    }
+  }
+}
+
+:global{
+  .tieba-item-enter{
+    left: 100%;
+  }
+}

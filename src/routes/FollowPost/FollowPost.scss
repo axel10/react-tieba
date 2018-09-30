@@ -1,0 +1,18 @@
+
+
+.FollowPost{
+  display: flex;
+  flex-direction: column;
+  .followPosts{
+    background-color: #fff;
+    margin-top: .5rem;
+    .top{
+      padding-left: 1rem;
+      padding-top: .5rem;
+      padding-bottom: .5rem;
+      display: flex;
+      align-items: center;
+      background-color: #fff;
+    }
+  }
+}

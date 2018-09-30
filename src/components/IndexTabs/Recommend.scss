@@ -1,0 +1,17 @@
+
+.Recommend{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100%;
+  background-color: #fff;
+  .img{
+    width: 60%;
+    margin-bottom: 1rem;
+    img{
+      width: 100%;
+    }
+  }
+  .tip{}
+}

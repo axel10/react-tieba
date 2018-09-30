@@ -1,0 +1,24 @@
+
+.Pager{
+  width: 100%;
+  background-color: #fff;
+  height: 2.8rem;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 0 2rem;
+  margin-top: .5rem;
+
+  .toPrev,.toNext{
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .count{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 7rem;
+  }
+}

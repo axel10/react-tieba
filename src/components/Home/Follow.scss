@@ -1,0 +1,52 @@
+
+
+
+.FollowAndFans{
+  width: 100%;
+
+  .empty{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: .5rem 0;
+    background-color: #fff;
+  }
+  ul{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    li{
+      height: 5.5rem;
+      background-color: #fff;
+      width: 33.333%;
+      //border: 1px solid #fefefe;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      $borderColor:#eee;
+      border-bottom: 1px solid $borderColor;
+      border-right: 1px solid $borderColor;
+      border-top: 1px solid $borderColor;
+
+      &:nth-child(3n){
+        border-right: 0;
+      }
+      &:nth-child(3n-2){
+        border-left: 1px solid $borderColor;
+      }
+      .headImg{
+        width: 3rem;
+        height: 3rem;
+        border-radius: 3rem;
+        background-size: cover;
+        margin-bottom: .5rem;
+      }
+      .userName{
+        font-size: .8rem;
+        margin: 0;
+      }
+    }
+  }
+}

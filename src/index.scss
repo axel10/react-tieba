@@ -1,0 +1,55 @@
+:global{
+  html, body {
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+    background-color: rgb(245, 245, 245);
+  }
+
+  ul, ol, li {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  h1,h2,h3,h4,h5,h6{
+    font-weight: normal;
+  }
+  input{
+    outline: none;
+  }
+  p{
+    display: block;
+  }
+  a{
+    text-decoration: none;
+  }
+  input[type='text']{
+    border: none;
+  }
+  textarea{
+    border: none;
+    width: 100%;
+    outline: none;
+  }
+
+  .g-dropdown{
+    position: absolute;
+    background-color: #fff;
+    border-radius: 4px;
+    padding: .5rem 0;
+    border: 1px solid #eeeeee;
+    ul{
+      li{
+        padding: .5rem .8rem
+      }
+    }
+  }
+  .iconfont{
+    font-size: 1.5rem;
+    color: #333;
+  }
+}
+

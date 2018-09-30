@@ -1,0 +1,79 @@
+
+
+.Post{
+  padding-top: 2.8rem;
+  .header{
+    position: fixed;
+    top: 0;
+    width: 100%;
+  }
+
+  .thread{
+    //padding: 0 1rem;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    .title{
+      font-weight: bold;
+      font-size: 1.8rem;
+      box-sizing: border-box;
+      padding-left: 1.2rem;
+    }
+  }
+
+  .post{
+    //padding: 0 1rem;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    .postTop{
+      display: flex;
+      align-items: center;
+      .headImg{
+        width: 2rem;
+        height: 2rem;
+        background-size: cover;
+      }
+      .center{
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        .name{
+          font-size: .9rem;
+        }
+        .time{
+          font-size: .8rem;
+          color: #999;
+        }
+      }
+      .icon{
+
+      }
+    }
+    .threadContent{
+
+    }
+    .postContent{
+      padding-left: 2rem;
+      box-sizing: border-box;
+      .followPosts{
+        background-color: #eeeeee;
+        box-sizing: border-box;
+        padding: .5rem;
+        ul{
+          li{
+            font-size: .9rem;
+            .user{
+              color: rgb(61,98,154);
+            }
+          }
+        }
+      }
+    }
+  }
+  .pager{
+  }
+
+}

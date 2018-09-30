@@ -1,0 +1,72 @@
+
+$padding : 1.2rem;
+
+.PostItem{
+  padding: 1rem 1rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  .postTop{
+    display: flex;
+    align-items: center;
+    .headImg{
+      width: 2rem;
+      height: 2rem;
+      background-size: cover;
+    }
+    .center{
+      margin-left: .5rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      p{
+        margin: 0;
+      }
+      .name{
+        font-size: .9rem;
+      }
+      .time{
+        font-size: .8rem;
+        color: #999;
+      }
+    }
+    .icon{
+
+    }
+  }
+  .topContent{
+
+    .content{
+      margin-top: $padding;
+      img{
+        width: 100%;
+      }
+    }
+  }
+  .postContent{
+    padding-left: 2rem;
+    box-sizing: border-box;
+    .content{
+      margin-top: $padding;
+
+      img{
+        width: 100%;
+      }
+    }
+    .followPosts{
+      background-color: #eeeeee;
+      box-sizing: border-box;
+      padding: .5rem;
+      ul{
+        li{
+          font-size: .9rem;
+          .user{
+            color: rgb(61,98,154);
+            margin-right: .5rem;
+          }
+        }
+      }
+    }
+  }
+}

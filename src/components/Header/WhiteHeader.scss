@@ -1,0 +1,38 @@
+
+.Header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #eee;
+  height: 2.7rem;
+  background-color: #fff;
+  width: 100%;
+  position: relative;
+  padding: 0 1rem;
+  box-sizing: border-box;
+  .icon{
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+  .left{
+  }
+  .right{
+    i{
+      margin-left: .5rem;
+    }
+  }
+  .center{
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    height: 2rem;
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}

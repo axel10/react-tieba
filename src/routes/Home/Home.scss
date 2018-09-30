@@ -1,0 +1,58 @@
+@import "../../var";
+
+.Home{
+  .top{
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 1rem 1rem 0;
+    .headImg{
+      width: 5rem;
+      height: 5rem;
+      background-size: cover;
+      border-radius: 5rem;
+      margin-right: .5rem;
+    }
+    .right{
+      display: flex;
+      margin-left: .5rem;
+      flex-direction: column;
+      justify-content: space-between;
+      .name{}
+      .btns{
+        background-color: #fff;
+        border-radius: 3px;
+        &>div{
+          padding: .5rem .8rem;
+          border-radius: 3px;
+        }
+      }
+    }
+  }
+  .tab{
+    width: 100%;
+    ul{
+      width: 100%;
+      display: flex;
+      li{
+        display: flex;
+        flex-direction: column;
+        height: 3rem;
+        justify-content: space-around;
+        align-items: center;
+        flex: 1;
+        box-sizing: border-box;
+        color: #999999;
+        &.active{
+          color: $mainColor;
+          //border-bottom: 2px solid $mainColor;
+        }
+      }
+    }
+  }
+  .container{
+    width: 100%;
+    .posts{
+    }
+  }
+}

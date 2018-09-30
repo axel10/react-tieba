@@ -1,0 +1,41 @@
+
+.TiebaFollows{
+  background-color: #fff;
+  padding: .5rem 0;
+
+  .empty{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  ul{
+    width: 100%;
+    li{
+      width: 100%;
+      padding: .8rem;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      .headImg{
+        width: 4rem;
+        height: 4rem;
+        background-size: cover;
+        border-radius: 3px;
+      }
+      .right{
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        .top{
+          .level{
+            margin-left: .5rem;
+          }
+        }
+        .bottom{
+          color: #aaaaaa;
+        }
+      }
+    }
+  }
+}

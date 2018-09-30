@@ -1,0 +1,15 @@
+
+
+.TieCollection{
+
+  .list>ul>li{
+    background-color: #ffffff;
+    .item{
+      padding: .5rem 1rem;
+      box-sizing: border-box;
+      h5{
+        margin-top: 0;
+      }
+    }
+  }
+}

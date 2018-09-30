@@ -1,0 +1,30 @@
+
+.DarkHeader{
+  background-color: rgb(38,43,66);
+  display: flex;
+  align-items: center;
+  height: 2.8rem;
+  color: rgb(163,180,204);
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 .5rem;
+  position: relative;
+
+  .back{
+    display: flex;
+    align-items: center;
+    i{
+      color: rgb(163,180,204);
+    }
+  }
+
+  .right{
+    position: relative;
+    margin-left: auto;
+  }
+
+  .title{
+    margin-left: .5rem;
+    font-size: 1.3rem;
+  }
+}

@@ -1,0 +1,196 @@
+@import "../../var";
+
+.Tieba{
+  width: 100%;
+  .noTieba{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .noneImg{
+      margin-top: 2rem;
+      width: 60%;
+      img{
+        width: 100%;
+      }
+    }
+    .title{
+      margin-top: 1rem;
+    }
+    .info{
+      color: #999999;
+      margin-top: .5rem;
+
+    }
+    .btn{
+      box-shadow: inset 0 0 1px rgba(0,0,0,.08);
+      border-radius: 2px;
+      text-align: center;
+      padding: 0 .6em;
+      border: 0;
+      -webkit-tap-highlight-color: rgba(0,0,0,0);
+      background: #297ee6 -webkit-gradient(linear,0 0,0 100%,from(#2b83ef),to(#2677db));
+      color: #fff;
+      display: block;
+      margin: 20px 50px 15px;
+      font-size: 16px;
+      height: 40px;
+      line-height: 40px;
+    }
+  }
+
+  .main{
+    padding-top: 2.7rem;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    .header{
+      position: fixed;
+      top: 0;
+      width: 100%;
+    }
+    .top{
+      display: flex;
+      align-items: center;
+      box-sizing: border-box;
+      padding: 1rem .6rem;
+      background-color: #fff;
+      .headImg{
+        height: 4rem;
+        width: 4rem;
+        background-size: cover;
+        margin-right: .5rem;
+        img{
+          width: 4rem;
+        }
+      }
+      .right{
+        h5,p{
+          margin: 0;
+        }
+        .levelInfo{
+          width: 6rem;
+          .level{
+            margin: 0;
+          }
+          .experience{
+            width: 100%;
+            height: 4px;
+            background-color: #cccccc;
+            .hasExperience{
+              background-color: #00b49c;
+              height: 100%;
+              display: block;
+            }
+          }
+        }
+      }
+/*      .info{
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        .title{
+          font-weight: normal;
+        }
+        p{
+          color: #aaaaaa;
+        }
+      }*/
+      .btn{
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        margin-left: auto;
+        .follow{
+          border: 1px solid $mainColor;
+          padding: .5rem .7rem;
+          color: $mainColor;
+        }
+      }
+    }
+
+    .empty{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: .5rem 0;
+      width: 100%;
+      background-color: #fff;
+    }
+    .posts{
+      .tab{
+        display: flex;
+        align-items: center;
+        background-color: #fff;
+        height: 2.5rem;
+      }
+
+      .topPost{
+        display: none;
+      }
+      .container{
+        width: 100%;
+        padding-top:.5rem;
+        ul{
+          width: 100%;
+          li{
+            width: 100%;
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            padding: .8rem 1rem;
+            margin-top: .5rem;
+            &:nth-child(1){
+              margin-top: 0;
+            }
+            .user{
+              display: flex;
+              align-items: center;
+              margin-bottom: 1rem;
+              .headImg{
+                width: 2rem;
+                height: 2rem;
+                background-size: cover;
+              }
+              .right{
+                margin-left: .5rem;
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                .name{
+                  font-size: .9rem;
+                }
+                .time{
+                  font-size: .8rem;
+                  color: #999;
+                }
+                p{
+                  margin: 0;
+                }
+              }
+            }
+            .title{}
+            .footer{
+              display: flex;
+              justify-content: flex-end;
+
+            }
+            .postCount{
+              font-size: 1rem;
+              i{
+                font-size: 1rem;
+                margin-right: .5rem;
+              }
+            }
+          }
+        }
+      }
+      .pager{
+        //margin-top: .5rem;
+      }
+    }
+
+  }
+
+}
