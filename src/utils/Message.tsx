@@ -1,14 +1,12 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Toast from '../components/Message/Toast'
+import { Toast } from 'src/utils/components/toast'
 
 export default {
   toast(title: string) {
-    const div: HTMLDivElement = document.createElement('div')
-    document.body.appendChild(div)
-    ReactDOM.render(<Toast title={title} />, div)
+    const toast = Toast(title)
     setTimeout(() => {
-      document.body.removeChild(div)
+      document.body.removeChild(toast)
     }, 3000)
   }
 }

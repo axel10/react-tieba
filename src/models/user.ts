@@ -8,6 +8,7 @@ export interface IUserState {
   }
   confirmPassword: string
   isAgree: boolean
+  errorMsg:string
 }
 
 export interface IModel extends Model {
@@ -23,14 +24,32 @@ const UserModel: IModel = {
       password: ''
     },
     confirmPassword: '',
-    isAgree: false
+    isAgree: false,
+    errorMsg:''
   },
 
   effects: {
-    *login(payload, { call, select }) {
+    *login(payload, {put, call, select }) {
       const state: IUserState = yield select((s) => s.index)
       const form = state.form
       yield call(userService.login, form.username, form.password)
+
+
+/*      userService
+        .login(this.state.form)
+        .catch((e) => {
+          if (e.response.status === 499) {
+            // this.setState({ errorMsg: e.response.data.ErrorMsg })
+          }
+          throw e
+        })
+        .then(() => {
+          Message.toast('登陆成功！')
+          history.push(this.state.fromPath)
+        })
+      */
+
+
       // history.push(state.fromUrl)
     },
     *register({ username, password }, { call, select }) {
@@ -42,10 +61,6 @@ const UserModel: IModel = {
   },
 
   reducers: {
-    /*    setFromUrl (state: IUserState, { url }) {
-      state.fromUrl = url
-      return { ...state }
-    },*/
     bindState(state: IUserState, { key, val }) {
       state[key] = val
       return { ...state }

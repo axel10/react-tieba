@@ -1,0 +1,50 @@
+
+.tiebaTab{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  flex: 1;
+
+  .tabBar {
+    width: 100%;
+    position: relative;
+    background-color: #fff;
+    ul {
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      position: relative;
+      align-items: center;
+      height: 2.7rem;
+      li{
+        a{
+          color: #000;
+        }
+      }
+    }
+    .strip{
+      height: 3px;
+      background-color: #333333;
+      position: absolute;
+      bottom: 0;
+      transition: width .2s;
+    }
+  }
+  .container {
+    position: relative;
+    flex: 1;
+    width: 100%;
+    &>div{
+      width: 100%;
+      &>div{
+        width: 100%;
+      }
+    }
+    .tabItem {
+      position: absolute;
+      top: 0;
+    }
+  }
+}
+
+

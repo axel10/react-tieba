@@ -6,28 +6,27 @@ import { Link } from 'react-router-dom'
 import tiebaService from 'src/services/tiebaService'
 
 export default class Test extends React.Component {
-  public componentDidMount() {
-    async function test() {
-      return tiebaService.getTip('a')
-    }
-
-    async function f() {
-      throw new Error('出错了')
-    }
-
-    f().then((v) => console.log(v), (e) => console.log(e))
+  public componentDidMount () {
+    console.log(this.props)
   }
 
-  public render() {
+  public render () {
+    function MyComp (args) {
+      return(
+        <div>mycomp</div>
+      )
+    }
+
     return (
       <div style={{ height: '2000px', position: 'relative' }}>
-        <div className="links" style={{ position: 'fixed' }}>
-          <Link to={'/test/1'}>123</Link>
-          <Link to={'/test/2'}>123</Link>
-        </div>
-        <div style={{ position: 'absolute', bottom: 0 }}>
-          <Link to={'/test/1'}>123</Link>
-        </div>
+        <Link to={'/test/1'}>
+          123
+        </Link>
+
+        <MyComp>
+          <div></div>
+        </MyComp>
+
       </div>
     )
   }

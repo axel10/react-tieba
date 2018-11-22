@@ -1,6 +1,6 @@
 import { Model } from 'dva'
 import { clone } from 'src/utils/utils'
-import { IAllState } from '../index'
+import { IAllState } from '..'
 import postService from '../services/postService'
 import { FollowPostDto } from '../types/Post/FollowPostDto'
 import { PostDto } from '../types/Post/PostDto'

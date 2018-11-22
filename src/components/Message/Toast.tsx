@@ -1,6 +1,4 @@
-import { connect } from 'dva'
 import React from 'react'
-import { IBaseProps } from '../../mixin/IBaseProps'
 import style from './Toast.scss'
 
 interface IProps {

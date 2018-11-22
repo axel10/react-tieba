@@ -1,20 +1,44 @@
 
+:global {
+  .post-input-enter {
+    transform: translateX(100%);
+  }
 
-.Post{
+  .post-input-enter-active {
+    transform: translateX(0%);
+  }
+
+  .post-input-exit {
+    transform: translateX(0%);
+  }
+
+  .post-input-exit-active {
+    transform: translateX(100%);
+
+  }
+}
+
+
+
+
+.Post {
   padding-top: 2.8rem;
-  .header{
+  width: 100%;
+
+  .header {
     position: fixed;
     top: 0;
     width: 100%;
   }
 
-  .thread{
+  .thread {
     //padding: 0 1rem;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
     background-color: #ffffff;
-    .title{
+
+    .title {
       font-weight: bold;
       font-size: 1.8rem;
       box-sizing: border-box;
@@ -22,58 +46,81 @@
     }
   }
 
-  .post{
+  .post {
     //padding: 0 1rem;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
     background-color: #fff;
-    .postTop{
+
+    .postTop {
       display: flex;
       align-items: center;
-      .headImg{
+
+      .headImg {
         width: 2rem;
         height: 2rem;
         background-size: cover;
       }
-      .center{
+
+      .center {
         flex: 1;
         display: flex;
         flex-direction: column;
-        .name{
+
+        .name {
           font-size: .9rem;
         }
-        .time{
+
+        .time {
           font-size: .8rem;
           color: #999;
         }
       }
-      .icon{
+
+      .icon {
 
       }
     }
-    .threadContent{
+
+    .threadContent {
 
     }
-    .postContent{
+
+    .postContent {
       padding-left: 2rem;
       box-sizing: border-box;
-      .followPosts{
+
+      .followPosts {
         background-color: #eeeeee;
         box-sizing: border-box;
         padding: .5rem;
-        ul{
-          li{
+
+        ul {
+          li {
             font-size: .9rem;
-            .user{
-              color: rgb(61,98,154);
+
+            .user {
+              color: rgb(61, 98, 154);
             }
           }
         }
       }
     }
   }
-  .pager{
+
+  .pager {
   }
 
+
+  .postInputWrap {
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    transition: transform .3s;
+  }
 }

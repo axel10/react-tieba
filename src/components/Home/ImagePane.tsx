@@ -24,7 +24,6 @@ class ImagePane extends React.Component<IProps, IState> {
   }
 
   public componentDidUpdate(preProps: IProps) {
-    console.log(this.props)
     if (preProps.isShow === this.props.isShow) return
     this.setState({ isShow: this.props.isShow })
   }

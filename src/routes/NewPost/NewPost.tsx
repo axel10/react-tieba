@@ -1,15 +1,16 @@
 import { connect } from 'dva'
 import React from 'react'
 import { withRouter } from 'react-router-dom'
+import { IBaseProps } from 'src/mixin/IBaseProps'
+import { IPostState } from 'src/models/post'
+import { PostType } from 'src/utils/enum/PostType'
+import { getTotalPage, showLoadingTip, toast, triggerClick } from 'src/utils/utils'
 import WhiteHeader from '../../components/Header/WhiteHeader'
 import history from '../../history'
-import { IBaseProps } from '../../mixin/IBaseProps'
-import { IPostState } from '../../models/post'
 import postService from '../../services/postService'
-import { PostType } from '../../utils/enum/PostType'
 import Message from '../../utils/Message'
-import { getTotalPage, triggerClick } from '../../utils/utils'
 import style from './NewPost.scss'
+import { ICommonState } from 'src/models/common'
 
 interface IState {
   title: string
@@ -23,10 +24,9 @@ interface IProps extends IBaseProps {
   post: IPostState
   postId?: number
   initContent: string
-
-  onSend(): void
-
-  onHide(): void
+  common:ICommonState
+  onSend (): void
+  onHide (): void
 }
 
 class NewPost extends React.Component<IProps, IState> {
@@ -37,10 +37,29 @@ class NewPost extends React.Component<IProps, IState> {
     thumbs: []
   }
 
+/*
+  componentDidMount () {
+    setTimeout(()=>{
+      const {isLogin} = this.props.common
+      if (!isLogin) {
+        toast('请先登录')
+        history.push('/login')
+      }
+    },600)
+  }
+*/
+
+
+  constructor (props) {
+    super(props)
+
+  }
+
+
   private dispatch = this.props.dispatch
   private contentInput: HTMLTextAreaElement
 
-  public render() {
+  public render () {
     const thumbs = this.state.thumbs
     let type = this.props.type
     if (!type) {
@@ -54,7 +73,7 @@ class NewPost extends React.Component<IProps, IState> {
           title={'编辑帖子'}
           left={
             <span onClick={this.goBack}>
-              <i className={'iconfont icon-left'} />
+              <i className={'iconfont icon-left'}/>
             </span>
           }
           right={<span onClick={this.submit}>发布</span>}
@@ -64,9 +83,9 @@ class NewPost extends React.Component<IProps, IState> {
             {type === PostType.thread ? (
               <div className={style.title}>
                 <input
-                  type="text"
+                  type='text'
                   name={'title'}
-                  placeholder="加个标题哟~"
+                  placeholder='加个标题哟~'
                   onInput={this.bindField}
                 />
               </div>
@@ -75,9 +94,9 @@ class NewPost extends React.Component<IProps, IState> {
             )}
             <div className={style.content}>
               <textarea
-                name="content"
+                name='content'
                 onInput={this.bindField}
-                placeholder="在这里输入内容"
+                placeholder='在这里输入内容'
                 defaultValue={initContent}
                 ref={(o) => {
                   this.contentInput = o
@@ -92,7 +111,7 @@ class NewPost extends React.Component<IProps, IState> {
                     ''
                   ) : (
                     <li onClick={this.triggerSelectFile}>
-                      <i className="iconfont icon-image" />
+                      <i className='iconfont icon-image'/>
                     </li>
                   )}
                 </ul>
@@ -108,18 +127,18 @@ class NewPost extends React.Component<IProps, IState> {
                         className={style.close}
                         onClick={this.removeImg.bind(this, i)}
                       >
-                        <i className="iconfont icon-close" />
+                        <i className='iconfont icon-close'/>
                       </div>
                     </li>
                   )
                 })}
-                <li className={style.add} />
+                <li className={style.add}/>
               </ul>
             </div>
             <input
-              type="file"
+              type='file'
               style={{ display: 'none' }}
-              id="files"
+              id='files'
               onInput={this.handleSelectFile}
             />
           </div>
@@ -191,16 +210,19 @@ class NewPost extends React.Component<IProps, IState> {
         formData.append('TiebaTitle', tiebaTitle)
         formData.append('Content', this.state.content)
         formData.append('Title', this.state.title)
+        const done = showLoadingTip('正在发帖')
         postService.createThread(formData).then((res) => {
           if (res) {
+            this.dispatch({ type: 'tieba/jump', pageNo: 1 })
             history.push(`/tieba/${tiebaTitle}`)
+            done('发帖成功')
           }
         })
-        this.dispatch({ type: 'tieba/jump', pageNo: 1 })
       }
       if (type === PostType.post) {
         formData.append('content', this.state.content)
         formData.append('threadId', this.props.match.params.threadId)
+        const done = showLoadingTip('正在发帖')
         postService.createPost(formData).then((o) => {
           if (o) {
             const post = this.props.post
@@ -209,16 +231,19 @@ class NewPost extends React.Component<IProps, IState> {
             history.push(`/p/${params.threadId}/${totalPage}`)
             this.dispatch({ type: 'post/getPosts', params })
             this.props.onSend()
+            done()
           }
         })
       }
       if (type === PostType.followPost) {
         if (!this.props.postId) throw new Error('类型为跟帖时必须传递帖子id')
+        const done = showLoadingTip('正在发帖')
         postService
           .createFollowPost(this.state.content, this.props.postId)
           .then((followPost) => {
             if (followPost) {
-              Message.toast('跟帖发送成功！')
+              // Message.toast('跟帖发送成功！')
+              done()
               this.dispatch({
                 type: 'post/addFollowPost',
                 followPost,

@@ -1,13 +1,14 @@
 import Schema from 'async-validator'
 import { AxiosError } from 'axios'
 import { connect } from 'dva'
+import qs from 'qs'
 import React from 'react'
+import { IBaseProps } from 'src/mixin/IBaseProps'
+import { getBindFieldObj, historyGoBack } from 'src/utils/utils'
 import WhiteHeader from '../../components/Header/WhiteHeader'
 import history from '../../history'
-import { IBaseProps } from '../../mixin/IBaseProps'
 import userService from '../../services/userService'
 import Message from '../../utils/Message'
-import { getBindFieldObj, historyGoBack } from '../../utils/utils'
 import style from './Login.scss'
 
 interface IState {
@@ -16,7 +17,8 @@ interface IState {
     username: string
     password: string
   }
-  errorMsg: string
+  errorMsg: string,
+  fromPath: string
 }
 
 class Login extends React.Component<IBaseProps, IState> {
@@ -29,12 +31,19 @@ class Login extends React.Component<IBaseProps, IState> {
       username: '',
       password: ''
     },
-    errorMsg: ''
+    errorMsg: '',
+    fromPath: '/'
   }
 
-  private dispatch = this.props.dispatch
+  constructor (props) {
+    super(props)
+    const qsParam = qs.parse(history.location.search.replace('?', ''))
+    if (qsParam.fromPath) {
+      this.state.fromPath = qsParam.fromPath
+    }
+  }
 
-  public render() {
+  public render () {
     return (
       <div className={style.LoginOrRegister}>
         <WhiteHeader
@@ -48,22 +57,22 @@ class Login extends React.Component<IBaseProps, IState> {
         />
         <div className={style.main}>
           <div className={style.logo}>
-            <img src={require('../../assets/baidu.png')} alt="" />
+            <img src={require('../../assets/baidu.png')} alt=''/>
           </div>
           <div className={style.inputGroup}>
             <div className={style.row}>
               <input
-                name="username"
-                type="text"
-                placeholder="输入用户名"
+                name='username'
+                type='text'
+                placeholder='输入用户名'
                 onInput={this.bindField}
               />
             </div>
             <div className={style.row}>
               <input
-                name="password"
-                type="password"
-                placeholder="输入密码"
+                name='password'
+                type='password'
+                placeholder='输入密码'
                 onInput={this.bindField}
               />
             </div>
@@ -95,7 +104,7 @@ class Login extends React.Component<IBaseProps, IState> {
           })
           .then(() => {
             Message.toast('登陆成功！')
-            history.push('/')
+            history.push(this.state.fromPath)
           })
       }
     })

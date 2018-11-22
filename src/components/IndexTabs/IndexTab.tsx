@@ -69,23 +69,26 @@ class IndexTab extends React.Component<IProps, IState> {
 
   private isAnimate = false
 
-  public constructor(props) {
+  public constructor (props) {
     super(props)
-    this.dispatch({ type: 'index/getUserInfo' })
+    if (this.props.index.isLogin === null) {
+      this.dispatch({ type: 'index/getUserInfo' })
+    }
   }
 
-  public render() {
+  public render () {
     const isLogin = this.props.index.isLogin
     const state = this.state
     const indexTiebas = state.indexTiebas
     const data: IndexTiebaDto[][] = arrGroup(indexTiebas, 3)
     const currentIndex = state.index
     const followTieba = this.props.index.followTiebas
+
     return (
       <div className={style.IndexTabs}>
         <div className={style.search} onClick={this.toSearch}>
           <span>
-            <i className="iconfont icon-search" />
+            <i className='iconfont icon-search' />
           </span>{' '}
           搜索一下
         </div>
@@ -108,7 +111,7 @@ class IndexTab extends React.Component<IProps, IState> {
                       className={style.remove}
                       onClick={this.removeFollowTieba.bind(this, o)}
                     >
-                      <i className="iconfont icon-close" />
+                      <i className='iconfont icon-close' />
                     </span>
                   ) : (
                     ''

@@ -15,7 +15,9 @@ class UserTab extends React.Component<IProps> {
 
   public constructor(props) {
     super(props)
-    this.dispatch({ type: 'index/getUserInfo' })
+    if (this.props.index.isLogin === null) {
+      this.dispatch({ type: 'index/getUserInfo' })
+    }
   }
 
   public render() {

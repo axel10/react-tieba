@@ -10,7 +10,7 @@ import { IBaseProps } from 'src/mixin/IBaseProps'
 import { ICommonState } from 'src/models/common'
 import { ITiebaState } from 'src/models/tieba'
 import { ThreadListDto } from 'src/types/Thread/ThreadListDto'
-import { historyPush } from 'src/utils/utils'
+import { historyPush, requireLogin, showLoadingTip, toast } from 'src/utils/utils'
 import style from './Tieba.scss'
 
 interface IProps extends IBaseProps {
@@ -23,20 +23,27 @@ interface IState {
   popupItems: IPopupItem[]
 }
 
+let position = 0
+
+function handleScroll () {
+  console.log(window.scrollY)
+  position = window.scrollY
+}
+
 class Tieba extends React.Component<IProps, IState> {
   public state: IState = {
     isShowPopup: false,
     popupItems: [
       {
         label: '搜索',
-        icon: <i className={'iconfont icon-search'} />,
+        icon: <i className={'iconfont icon-search'}/>,
         callback: () => {
           historyPush(`/search`)
         }
       },
       {
         label: '消息',
-        icon: <i className={'iconfont icon-bell'} />,
+        icon: <i className={'iconfont icon-bell'}/>,
         callback: () => {
           historyPush(`/message`)
         }
@@ -44,19 +51,27 @@ class Tieba extends React.Component<IProps, IState> {
     ]
   }
 
+  public container: HTMLElement
+
   private dispatch = this.props.dispatch
 
   private hasExperience: HTMLElement = null
 
-  public componentDidMount() {
+  public componentWillUnmount () {
+    console.log('unmount')
+  }
+
+  public componentDidMount () {
     this.dispatch({
       type: 'tieba/setTitle',
       title: this.props.match.params.title
     })
     this.dispatch({ type: 'tieba/init' })
+
+    console.log(position)
   }
 
-  public render() {
+  public render () {
     const {
       hasTieba,
       levelInfo,
@@ -75,24 +90,24 @@ class Tieba extends React.Component<IProps, IState> {
       isEmpty
     } = this.props.tieba.threads
     return (
-      <div className={style.Tieba}>
+      <div className={style.Tieba} ref={(ref) => this.container = ref}>
         {hasTieba === true ? (
           <div className={style.main}>
             <div className={style.header}>
               <WhiteHeader
                 title={title}
                 left={
-                  <Link to={'/'}>
-                    <i className={'iconfont icon-home'} />
+                  <Link replace={true} to={'/'}>
+                    <i className={'iconfont icon-home'}/>
                   </Link>
                 }
                 right={
                   <span>
-                    <Link to={`/newPost/${title}`}>
-                      <i className="icon-edit-square iconfont" />
-                    </Link>
+                    <a onClick={this.toNewPost}>
+                      <i className='icon-edit-square iconfont'/>
+                    </a>
                     <i
-                      className="iconfont icon-more"
+                      className='iconfont icon-more'
                       onClick={this.setPopupShow.bind(this, true)}
                     />
                   </span>
@@ -175,7 +190,7 @@ class Tieba extends React.Component<IProps, IState> {
                         <div className={style.title}>{o.title}</div>
                         <div className={style.footer}>
                           <span className={style.postCount}>
-                            <i className="iconfont icon-message" />
+                            <i className='iconfont icon-message'/>
                             {o.postCount}
                           </span>
                         </div>
@@ -195,9 +210,9 @@ class Tieba extends React.Component<IProps, IState> {
           </div>
         ) : hasTieba === false ? (
           <div className={style.noTieba}>
-            <DarkHeader title={'创建贴吧'} />
+            <DarkHeader title={'创建贴吧'}/>
             <div className={style.noneImg}>
-              <img src="/none.png" alt="" />
+              <img src='/none.png' alt=''/>
             </div>
             <h4 className={style.title}>{title}吧</h4>
             <p className={style.toast}>欢迎创建此吧，和朋友们在这里交流</p>
@@ -216,6 +231,17 @@ class Tieba extends React.Component<IProps, IState> {
       </div>
     )
   }
+
+  private toNewPost = () => {
+    const { isLogin } = this.props.common
+    if (!isLogin) {
+      requireLogin(history.location.pathname)
+    } else {
+      const { title } = this.props.tieba.tiebaInfo
+      history.push(`/newPost/${title}`)
+    }
+  }
+
   private setPopupShow = (b) => {
     this.setState({ isShowPopup: b })
   }
@@ -223,16 +249,26 @@ class Tieba extends React.Component<IProps, IState> {
     this.dispatch({ type: 'tieba/create', params: this.props.match.params })
   }
   private follow = () => {
-    this.dispatch({ type: 'tieba/follow' })
+    (this.dispatch({ type: 'tieba/follow' }) as any).then(() => {
+      toast('关注成功！')
+    })
   }
   private sign = () => {
-    this.dispatch({ type: 'tieba/sign' })
+    (this.dispatch({ type: 'tieba/sign' }) as any).then(() => {
+      toast('签到成功！')
+    })
   }
   private toPost = (id: number) => {
     history.push(`/p/${id}`)
   }
+  // 页数调整
   private jumpPage = (pageNo: number) => {
-    this.dispatch({ type: 'tieba/jump', pageNo })
+    const done = showLoadingTip()
+    const res: any = this.dispatch({ type: 'tieba/jump', pageNo })
+    console.log(res)
+    res.then(() => {
+      done('')
+    })
   }
 }
 

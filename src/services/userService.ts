@@ -2,6 +2,7 @@ import { MessageCountDto } from '../types/User/MessageCountDto'
 import { CollectionPostType } from '../utils/enum/CollectionPostType'
 import { MessageType } from '../utils/enum/MessageType'
 import request from '../utils/request'
+import axios from 'axios'
 
 interface ITieCollectionOptions {
   type: CollectionPostType
@@ -16,6 +17,12 @@ export interface IGetTiebaFollowOptions {
 }
 
 export default {
+
+  // 即使未登录也不跳转
+  checkIsLogin() {
+    return axios.post('/user/CheckIsLogin')
+  },
+
   login({ username, password }) {
     return request.post('/user/login', { username, password })
   },
@@ -25,9 +32,7 @@ export default {
   register(username, password) {
     return request.post('/user/register', { username, password })
   },
-  checkIsLogin() {
-    return request.post('/user/CheckIsLogin')
-  },
+
   getTieCollection({ pageSize, pageNo }) {
     return request.post('/user/GetTieCollections', { pageSize, pageNo })
   },

@@ -2,54 +2,8 @@
 .Index {
   display: flex;
   flex-direction: column;
-  height: 100%;
-  .tabBar {
-    width: 100%;
-    position: relative;
-    background-color: #fff;
-    ul {
-      width: 100%;
-      display: flex;
-      justify-content: space-around;
-      position: relative;
-      align-items: center;
-      height: 2.7rem;
-      li{
-        a{
-          color: #000;
-        }
-      }
-    }
-    .strip{
-      height: 3px;
-      background-color: #333333;
-      position: absolute;
-      bottom: 0;
-      transition: width .2s;
-    }
-  }
-  .container {
-    position: relative;
-    flex: 1;
-    &>div{
-      width: 100%;
-      &>div{
-
-        position: absolute;
-        width: 100%;
-        top: 0;
-      }
-    }
-    .tabItem {
-      position: absolute;
-      top: 0;
-    }
-/*    & > div >  {
-      transition: all .6s;
-      position: absolute;
-      top: 0;
-    }*/
-  }
+  width: 100%;
+  min-height: 100%;
 }
 
 :global{

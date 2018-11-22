@@ -17,25 +17,22 @@ const CommonModel: IModel = {
   },
 
   effects: {
-    *checkIsLogin(p, { put, call }) {
+    * checkIsLogin (p, { put, call }) {
       const result = yield call(userService.checkIsLogin)
-      if (result) {
-        yield put({ type: 'setIsLogin', b: true })
-      } else {
-        yield put({ type: 'setIsLogin', b: false })
-      }
+      console.log(result)
+      yield put({ type: 'setIsLogin', b: result.data })
     }
   },
 
   reducers: {
-    setIsLogin(state: ICommonState, { b }) {
+    setIsLogin (state: ICommonState, { b }) {
       state.isLogin = b
       return { ...state }
     }
   },
   subscriptions: {
-    setup({ dispatch }) {
-      dispatch({ type: 'common/checkIsLogin' })
+    setup ({ dispatch }) {
+      dispatch({ type: 'checkIsLogin' })
     }
   }
 }

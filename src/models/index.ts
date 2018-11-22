@@ -1,5 +1,5 @@
 import { Model } from 'dva'
-import { IAllState } from 'src/index'
+import { IAllState } from 'src'
 import { TiebaFollowDto } from 'src/types/Tieba/TiebaFollowDto'
 import userService from '../services/userService'
 import { UserListDto } from '../types/User/UserListDto'

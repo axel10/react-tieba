@@ -1,6 +1,6 @@
 import { Model } from 'dva'
 import history from '../history'
-import { IAllState } from '../index'
+import { IAllState } from '..'
 import postService from '../services/postService'
 import userService from '../services/userService'
 import { TieCollectionDto } from '../types/User/TieCollectionDto'

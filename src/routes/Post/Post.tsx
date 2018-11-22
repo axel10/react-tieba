@@ -18,6 +18,7 @@ import {
 } from 'src/utils/utils'
 import NewPost from '../NewPost/NewPost'
 import style from './Post.scss'
+import { CSSTransition } from 'react-transition-group'
 
 interface IProps extends IBaseProps {
   post: IPostState
@@ -34,7 +35,7 @@ class Post extends React.Component<IProps, IState> {
     popupItems: [
       {
         label: '只看楼主',
-        icon: <i className={'iconfont icon-louzhu'} />,
+        icon: <i className={'iconfont icon-louzhu'}/>,
         callback: () => {
           historyPush(`/p/${this.props.post.thread.id}/1/1`)
         }
@@ -52,18 +53,15 @@ class Post extends React.Component<IProps, IState> {
 
   public componentDidMount () {
     this.dispatch({ type: 'post/init', params: this.props.match.params })
+    document.querySelector('#routeWrap').scrollTo(0,0)
   }
 
   public render () {
     const data = this.props.post
-    const posts = data.posts
-    const thread = data.thread
-    const isShowPostInput = this.props.post.isShowPostInput
-    const isShowFollowPostInput = this.props.post.isShowFollowPostInput
+    const { posts, thread, isShowPostInput, isShowFollowPostInput, pageSize, count, currentPostId } = data
     const params = this.props.match.params
     const currentPage = params.pageNo ? params.pageNo : 1
-    const totalPage = getTotalPage(data.pageSize, data.count)
-    const currentPostId = this.props.post.currentPostId
+    const totalPage = getTotalPage(pageSize, count)
     return (
       <div className={style.Post}>
         <div className={style.header}>
@@ -71,7 +69,7 @@ class Post extends React.Component<IProps, IState> {
             title={data.title}
             left={
               <span onClick={goBack}>
-                <i className={'iconfont icon-left'} />
+                <i className={'iconfont icon-left'}/>
               </span>
             }
             right={
@@ -124,41 +122,21 @@ class Post extends React.Component<IProps, IState> {
           </ul>
         </div>
         <div className='pager'>
-          <Pager currentPage={currentPage} totalPage={totalPage} />
+          <Pager currentPage={currentPage} totalPage={totalPage}/>
         </div>
-        {isShowPostInput ? (
-          <div
-            style={{
-              position: 'fixed',
-              zIndex: 1000,
-              left: 0,
-              right: 0,
-              top: 0,
-              bottom: 0,
-              margin: 'auto'
-            }}
-          >
+
+        <CSSTransition classNames={'post-input'} timeout={600} in={isShowPostInput} unmountOnExit={true}>
+          <div className={style.postInputWrap} >
             <NewPost
               onSend={this.handlePostInputHide}
               onHide={this.handlePostInputHide}
               type={PostType.post}
             />
           </div>
-        ) : (
-          ''
-        )}
-        {isShowFollowPostInput ? (
-          <div
-            style={{
-              position: 'fixed',
-              zIndex: 1000,
-              left: 0,
-              right: 0,
-              top: 0,
-              bottom: 0,
-              margin: 'auto'
-            }}
-          >
+        </CSSTransition>
+
+        <CSSTransition in={isShowFollowPostInput} classNames={'post-input'} timeout={600} unmountOnExit={true}>
+          <div className={style.postInputWrap} >
             <NewPost
               onSend={this.handleFollowPostInputHide}
               onHide={this.handleFollowPostInputHide}
@@ -166,9 +144,9 @@ class Post extends React.Component<IProps, IState> {
               postId={currentPostId}
             />
           </div>
-        ) : (
-          ''
-        )}
+        </CSSTransition>
+
+
         <Popup
           isShow={this.state.isShowPopup}
           onHide={this.setPopupShow.bind(this, false)}
@@ -238,7 +216,6 @@ class Post extends React.Component<IProps, IState> {
     const that = this
     const el = e.currentTarget as HTMLElement
     const opts = []
-    console.log(o)
     opts.push({
       label: '回复',
       callback () {

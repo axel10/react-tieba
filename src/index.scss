@@ -51,5 +51,74 @@
     font-size: 1.5rem;
     color: #333;
   }
+
+  .g-toast{
+    background-color: rgba(0,0,0,.8);
+    border-radius: 3px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: .5rem .8rem;
+    color: #ffffff;
+    transition: opacity .3s;
+    opacity: 0;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform:translate(-50%,-50%);
+  }
+
+  .transitionLeft-enter{
+    transform:translateX(100%);
+  }
+
+  .transitionLeft-enter-active{
+    transform: translateX(0);
+  }
+
+  .transitionRight-enter{
+    transform:translateX(-100%);
+  }
+
+  .transitionRight-enter-active{
+    transform: translateX(0);
+  }
+
+  .transitionLeft-exit{
+    transform: translateX(0);
+  }
+
+
+  .transitionLeft-enter,.transitionLeft-enter-active,.transitionRight-enter,.transitionRight-enter-active{
+    z-index: 100;
+  }
+
+  .transitionLeft-exit,.transitionLeft-exit-active,.transitionRight-exit,.transitionRight-exit-active{
+    z-index: 1;
+  }
+
+  .transitionLeft-exit-active,.transitionRight-exit-active{
+    transition: all 1s ease; /*定义动画的时间和过渡效果*/
+    position: absolute;
+    width: 100%;
+  }
+  .transitionLeft-enter-active,.transitionRight-enter-active{
+    transition: all 1s ease; /*定义动画的时间和过渡效果*/
+    position: absolute;
+    width: 100%;
+  }
+
+  .router-enter-active{
+    position: relative;
+    opacity: 0;
+    //transition:left,right 2s;
+
+  }
+  .router-exit-active{
+    position: relative;
+    z-index: 1000;
+    //transition:left,right 2s;
+  }
+
 }
 

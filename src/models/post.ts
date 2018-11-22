@@ -1,6 +1,6 @@
 import { Model } from 'dva'
 import { CollectionPostType } from 'src/utils/enum/CollectionPostType'
-import { IAllState } from '../index'
+import { IAllState } from '..'
 import postService from '../services/postService'
 import userService from '../services/userService'
 import { IPageData } from '../types/Common/IPageData'
