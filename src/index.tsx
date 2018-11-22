@@ -12,7 +12,7 @@ import search, { ISearchState } from './models/search'
 import tieba, { ITiebaState } from './models/tieba'
 import tieCollection, { ITieCollectionState } from './models/tieCollection'
 import user, { IUserState } from './models/user'
-import { router } from './router'
+import { MyRouter } from './router'
 
 // 1. Initialize
 const app = dva({
@@ -31,7 +31,7 @@ app.model({
   namespace: 'init',
   state: {},
   subscriptions: {
-    setup(obj) {
+    setup (obj) {
       dispatch = obj.dispatch
     }
   }
@@ -58,7 +58,7 @@ export interface IAllState {
 }
 
 // 4. Router
-app.router(router)
+app.router(MyRouter)
 
 // axios.defaults.baseURL = 'https://api.tieba.axel10.com'
 axios.defaults.baseURL = config.baseUrl
