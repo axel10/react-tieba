@@ -2,7 +2,7 @@ import { Model } from 'dva'
 import * as _ from 'lodash'
 import tiebaService from 'src/services/tiebaService'
 import { IPageData } from 'src/types/Common/IPageData'
-import { PageLoadAble } from 'src/types/Common/PageLoadAble'
+import { PageLoadAbleData } from 'src/types/Common/PageLoadAbleData'
 import { TiebaDto } from 'src/types/Tieba/TiebaDto'
 import { historyPush, showLoadingTip, toast } from 'src/utils/utils'
 import { IAllState } from '..'
@@ -12,7 +12,7 @@ import { LevelInfo } from '../types/User/LevelInfo'
 
 export interface ITiebaState {
   tiebaInfo: TiebaDto
-  threads: PageLoadAble<ThreadListDto>
+  threads: PageLoadAbleData<ThreadListDto>
 }
 
 interface IModel extends Model {
@@ -21,7 +21,7 @@ interface IModel extends Model {
 
 const initState = {
   tiebaInfo: new TiebaDto(),
-  threads: new PageLoadAble(5)
+  threads: new PageLoadAbleData(10)
 }
 
 function initExperienceBar (levelInfo: LevelInfo) {
@@ -37,7 +37,7 @@ function initExperienceBar (levelInfo: LevelInfo) {
 const tieba: IModel = {
   namespace: 'tieba',
 
-  state: _.clone(initState) as ITiebaState,
+  state: _.cloneDeep(initState) as ITiebaState,
 
   effects: {
     * create ({ params }, { put, call, select }) {
@@ -54,11 +54,9 @@ const tieba: IModel = {
         }
       }
     },
-    * init (payload, { put, call, select }) {
-      const state: ITiebaState = yield select((s: IAllState) => s.tieba)
-      const title = state.tiebaInfo.title
+    * init ({title}, { put, call, select }) {
       const data: TiebaDto = yield call(tiebaService.getTiebaData, title)
-
+      console.log(data)
       if (data) {
         yield put({ type: 'setData', data: { tiebaInfo: data } })
         yield put({ type: 'setHasTieba', b: true })
@@ -80,6 +78,12 @@ const tieba: IModel = {
         pageSize: state.threads.pageSize,
         pageNo,
         tiebaId: state.tiebaInfo.id
+      })
+      data.data.forEach(o => {
+        o.imgs = []
+        o.content.replace(/src=['"](.+\.(?:jpg|png|jpeg|gif))['"]/g, (match, param) => {
+          o.imgs.push(param)
+        })
       })
       yield put({ type: 'setThread', threads: data.data, total: data.total })
       yield put({ type: 'setPageNo', pageNo })
@@ -124,7 +128,7 @@ const tieba: IModel = {
       return { ...state }
     },
     reset (state: ITiebaState) {
-      state = _.clone(initState) as ITiebaState
+      state = _.cloneDeep(initState) as ITiebaState
       return { ...state }
     },
     setPageNo (state: ITiebaState, { pageNo }) {
@@ -139,7 +143,7 @@ const tieba: IModel = {
     setIsCanSign (state: ITiebaState, { b }) {
       state.tiebaInfo.isCanSign = b
       return { ...state }
-    }
+    },
   }
 }
 

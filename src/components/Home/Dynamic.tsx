@@ -1,6 +1,8 @@
 import { connect } from 'dva'
 import React from 'react'
 import { withRouter } from 'react-router'
+import history from 'src/history'
+import postService from 'src/services/postService'
 import userService from 'src/services/userService'
 import { IBaseProps } from '../../mixin/IBaseProps'
 import { IHomeState } from '../../models/home'
@@ -23,7 +25,7 @@ class Dynamic extends React.Component<IProps, IState> {
 
   private dispatch = this.props.dispatch
 
-  public constructor(props) {
+  public constructor (props) {
     super(props)
     if (!this.props.home.dynamics.isLoaded) {
       this.dispatch({
@@ -34,7 +36,7 @@ class Dynamic extends React.Component<IProps, IState> {
     }
   }
 
-  public render() {
+  public render () {
     const { isEmpty, isEnd, data } = this.props.home.dynamics
     return (
       <div className={style.Dynamic}>
@@ -43,7 +45,7 @@ class Dynamic extends React.Component<IProps, IState> {
         ) : (
           <ul>
             {data.map((o, i) => (
-              <li key={i}>
+              <li key={i} id={o.threadId.toString()} onClick={this.jumpToPost(o.threadId,o.postId)}>
                 <p className={style.threadContent}>{o.content}</p>
                 {o.postId ? (
                   <div className={style.thread}>
@@ -52,8 +54,8 @@ class Dynamic extends React.Component<IProps, IState> {
                     <div className={style.imgs}>
                       {o.thread.covers && o.thread.covers.length
                         ? o.thread.covers.map((img, j) => (
-                            <img src={img} alt="" key={j} />
-                          ))
+                          <img src={img} alt='' key={j}/>
+                        ))
                         : ''}
                     </div>
                   </div>
@@ -77,6 +79,16 @@ class Dynamic extends React.Component<IProps, IState> {
         )}
       </div>
     )
+  }
+
+  private jumpToPost = (threadId,postId) => () => {
+    if (postId) {
+      postService.getPageNo(postId).then(pageNo => {
+        history.push(`/p/${threadId}/${pageNo}/${postId}`)
+      })
+    } else {
+      history.push(`/p/${threadId}`)
+    }
   }
 }
 

@@ -1,0 +1,12 @@
+@import "~src/var.scss";
+
+.Button{
+  border: 1px solid #aaaaaa;
+  background-color: #fff;
+  font-size: .9rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: .3rem .5rem;
+  border-radius: $borderRadius;
+}

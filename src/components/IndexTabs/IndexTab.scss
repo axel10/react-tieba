@@ -28,12 +28,19 @@
       flex-wrap: wrap;
       justify-content: space-between;
       li{
-        width: 42%;
+        width: 50%;
         display: flex;
         justify-content: space-between;
         align-items: center;
         height: 2rem;
         margin-bottom: .5rem;
+
+        &:nth-child(odd){
+          .level{
+            width: 2rem;
+            border-right: 1px solid #ccc;
+          }
+        }
       }
     }
     .open{
@@ -106,6 +113,8 @@
             color: $mainColor;
             margin-left: auto;
           }
+
+
         }
       }
     }

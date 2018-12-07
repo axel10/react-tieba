@@ -115,6 +115,7 @@
           justify-content: space-between;
           margin-top: .5rem;
           .item {
+            margin-bottom: .5rem;
             height: 43px;
             width: 46%;
             line-height: 43px;
@@ -136,6 +137,7 @@
               color: #000;
               font-size: 15px;
             }
+
           }
         }
       }

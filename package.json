@@ -5,29 +5,29 @@
   "scripts": {
     "dev": "webpack-dev-server --config build/webpack.dev.js",
     "build": "webpack --mode production",
-    "tslint:fix": "tslint --fix \"src/**/*.{ts,tsx}\" "
+    "tslint:fix": "tslint --fix \"src/**/*.{ts,tsx}\" ",
+    "analyz": "NODE_ENV=production npm_config_report=true npm run build"
   },
   "dependencies": {
-    "@types/lodash": "^4.14.116",
     "async-validator": "^1.8.5",
     "axios": "^0.18.0",
     "dva": "^2.4.0",
+    "dva-loading": "^2.0.6",
     "history": "^4.7.2",
     "lodash": "^4.17.11",
     "qs": "^6.5.2",
     "react": "^16.4.2",
+    "react-content-loader": "^3.2.0",
     "react-dom": "^16.4.2",
     "react-image": "^1.4.1",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
-    "react-router-redux": "^4.0.8",
-    "react-router-scroll-memory": "^1.0.2",
-    "react-router-transition": "^1.2.1",
     "react-transition-group": "^2.4.0",
     "redux": "^4.0.0",
     "swiper": "^4.4.2"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.116",
     "@types/react": "^16.4.11",
     "@types/react-dom": "^16.0.7",
     "@types/react-router": "^4.0.30",
@@ -77,6 +77,7 @@
     "typescript": "^3.0.1",
     "url-loader": "^1.1.1",
     "webpack": "^4.18.0",
+    "webpack-bundle-analyzer": "^3.0.3",
     "webpack-cli": "^3.1.0",
     "webpack-dev-server": "^3.1.8",
     "webpack-merge": "^4.1.4"

@@ -4,7 +4,6 @@ import { IBaseProps } from '../../mixin/IBaseProps'
 import style from './Recommend.scss'
 
 class Recommend extends React.Component<IBaseProps> {
-  private dispatch = this.props.dispatch
 
   public render() {
     return (

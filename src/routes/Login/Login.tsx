@@ -104,6 +104,7 @@ class Login extends React.Component<IBaseProps, IState> {
           })
           .then(() => {
             Message.toast('登陆成功！')
+            this.props.dispatch({ type: 'common/setIsLogin', b: true })
             history.push(this.state.fromPath)
           })
       }

@@ -1,9 +1,12 @@
 import { connect } from 'dva'
 import React from 'react'
+import { CSSTransition } from 'react-transition-group'
+import LoadingContainer from 'src/components/Common/LoadingContainer'
 import WhiteHeader from 'src/components/Header/WhiteHeader'
 import Pager from 'src/components/Pager/Pager'
-import Popup, { IPopupItem } from 'src/components/Popup/Popup'
+import Popup from 'src/components/Popup/Popup'
 import PostItem from 'src/components/PostItem/PostItem'
+import history from 'src/history'
 import { IBaseProps } from 'src/mixin/IBaseProps'
 import { IPostState } from 'src/models/post'
 import { PostDto } from 'src/types/Post/PostDto'
@@ -14,11 +17,10 @@ import {
   dropDownPosition,
   getTotalPage,
   goBack,
-  historyPush
+  historyPush, offsetTop
 } from 'src/utils/utils'
 import NewPost from '../NewPost/NewPost'
 import style from './Post.scss'
-import { CSSTransition } from 'react-transition-group'
 
 interface IProps extends IBaseProps {
   post: IPostState
@@ -26,21 +28,11 @@ interface IProps extends IBaseProps {
 
 interface IState {
   isShowPopup: boolean
-  popupItems: IPopupItem[]
 }
 
 class Post extends React.Component<IProps, IState> {
   public state: IState = {
-    isShowPopup: false,
-    popupItems: [
-      {
-        label: '只看楼主',
-        icon: <i className={'iconfont icon-louzhu'}/>,
-        callback: () => {
-          historyPush(`/p/${this.props.post.thread.id}/1/1`)
-        }
-      }
-    ]
+    isShowPopup: false
   }
 
   private dispatch = this.props.dispatch
@@ -51,22 +43,62 @@ class Post extends React.Component<IProps, IState> {
     }
   }
 
-  public componentDidMount () {
-    this.dispatch({ type: 'post/init', params: this.props.match.params })
-    document.querySelector('#routeWrap').scrollTo(0,0)
+  public async componentDidMount () {
+
+    await this.dispatch({ type: 'post/clearPosts' })
+
+    const done: any = this.dispatch({ type: 'post/init', params: this.props.match.params })
+    done.then(() => {
+      setTimeout(() => {
+        const params = this.props.match.params
+        const post = document.getElementById(params.postId)
+        if (post) {
+          window.scrollTo({ top: offsetTop(post) })
+        }
+      })
+    })
+  }
+
+  public componentWillReceiveProps (nextProps: Readonly<IProps>, nextContext: any): void {
+    if (this.props.location.search !== nextProps.location.search) {
+      this.dispatch({ type: 'post/init', params: this.props.match.params })
+    }
+  }
+
+  public componentWillUnmount (): void {
+    console.log('unmount')
   }
 
   public render () {
-    const data = this.props.post
-    const { posts, thread, isShowPostInput, isShowFollowPostInput, pageSize, count, currentPostId } = data
-    const params = this.props.match.params
-    const currentPage = params.pageNo ? params.pageNo : 1
+    const { threadId } = this.props.match.params
+    const popUpOpt = [
+      this.props.post.isSeeLz ? {
+        label: '取消只看楼主',
+        icon: <i className={'iconfont icon-louzhu'}/>,
+        callback: () => {
+          historyPush(`/p/${threadId}/1`)
+        }
+      } : {
+        label: '只看楼主',
+        icon: <i className={'iconfont icon-louzhu'}/>,
+        callback: () => {
+          historyPush(`/p/${threadId}/1?isSeeLz=1`)
+        }
+      }
+    ]
+
+    const { posts, thread, isShowPostInput, isShowFollowPostInput, pageSize, count, currentPostId, title } = this.props.post
+
+    const { id: lzId } = this.props.post.thread.creator
+    const { pageNo } = this.props.match.params
+    const currentPage = pageNo ? pageNo : 1
     const totalPage = getTotalPage(pageSize, count)
+    const { post: loading } = this.props.loading.models
     return (
       <div className={style.Post}>
         <div className={style.header}>
           <WhiteHeader
-            title={data.title}
+            title={title}
             left={
               <span onClick={goBack}>
                 <i className={'iconfont icon-left'}/>
@@ -88,45 +120,50 @@ class Post extends React.Component<IProps, IState> {
         </div>
         <div className={style.thread}>
           <h3 className={style.title}>{thread.title}</h3>
-          <PostItem
-            type={PostType.thread}
-            threadDto={thread}
-            isTop={true}
-            more={
-              <i
-                className='iconfont icon-ellipsis'
-                onClick={this.showThreadDropDown}
-              />
-            }
-          />
+          <LoadingContainer loading={loading}>
+            <PostItem
+              type={PostType.thread}
+              threadDto={thread}
+              isTop={true}
+              more={
+                <i
+                  className='iconfont icon-ellipsis'
+                  onClick={this.showThreadDropDown}
+                />
+              }
+            />
+          </LoadingContainer>
         </div>
 
         <div className={style.posts}>
-          <ul>
-            {posts.map((o: PostDto, i) => {
-              return (
-                <li key={i} data-postid={o.id}>
-                  <PostItem
-                    postDto={o}
-                    type={PostType.post}
-                    more={
-                      <i
-                        className='iconfont icon-ellipsis'
-                        onClick={this.showPostDropDown.bind(this, o)}
-                      />
-                    }
-                  />
-                </li>
-              )
-            })}
-          </ul>
+          <LoadingContainer loading={loading}>
+            <ul>
+              {posts.map((o: PostDto, i) => {
+                return (
+                  <li key={i} data-postid={o.id} id={o.id.toString()}>
+                    <PostItem
+                      postDto={o}
+                      type={PostType.post}
+                      lzId={lzId}
+                      more={
+                        <i
+                          className='iconfont icon-ellipsis'
+                          onClick={this.showPostDropDown.bind(this, o)}
+                        />
+                      }
+                    />
+                  </li>
+                )
+              })}
+            </ul>
+          </LoadingContainer>
         </div>
         <div className='pager'>
-          <Pager currentPage={currentPage} totalPage={totalPage}/>
+          <Pager currentPage={currentPage} totalPage={totalPage} onJump={this.onJump}/>
         </div>
 
         <CSSTransition classNames={'post-input'} timeout={600} in={isShowPostInput} unmountOnExit={true}>
-          <div className={style.postInputWrap} >
+          <div className={style.postInputWrap}>
             <NewPost
               onSend={this.handlePostInputHide}
               onHide={this.handlePostInputHide}
@@ -136,7 +173,7 @@ class Post extends React.Component<IProps, IState> {
         </CSSTransition>
 
         <CSSTransition in={isShowFollowPostInput} classNames={'post-input'} timeout={600} unmountOnExit={true}>
-          <div className={style.postInputWrap} >
+          <div className={style.postInputWrap}>
             <NewPost
               onSend={this.handleFollowPostInputHide}
               onHide={this.handleFollowPostInputHide}
@@ -146,11 +183,10 @@ class Post extends React.Component<IProps, IState> {
           </div>
         </CSSTransition>
 
-
         <Popup
           isShow={this.state.isShowPopup}
           onHide={this.setPopupShow.bind(this, false)}
-          items={this.state.popupItems}
+          items={popUpOpt}
         />
       </div>
     )
@@ -246,6 +282,12 @@ class Post extends React.Component<IProps, IState> {
     setTimeout(() => {
       dropDownList(opts, el, dropDownPosition.leftBottom)
     })
+  }
+
+  private onJump = (pageNo) => {
+    const { threadId } = this.props.match.params
+    // debugger
+    history.push(`/p/${threadId}/${pageNo}${history.location.search}`, { noAnimate: true })
   }
 }
 

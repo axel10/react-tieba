@@ -12,7 +12,8 @@ const prodUrlLoader = "url-loader?limit=8192&name=[hash:8].[name].[ext]&outputPa
 
 module.exports = {
   entry: {
-    app: ['babel-polyfill',path.resolve(__dirname, '../src/index.tsx')],
+    // app: ['babel-polyfill',path.resolve(__dirname, '../src/index.tsx')],
+    app: path.resolve(__dirname, '../src/index.tsx'),
   },
   output: {
     publicPath: "/"

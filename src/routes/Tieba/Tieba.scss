@@ -1,35 +1,41 @@
 @import "../../var";
 
-.Tieba{
+.Tieba {
   width: 100%;
-  .noTieba{
+
+  .noTieba {
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    .noneImg{
+
+    .noneImg {
       margin-top: 2rem;
       width: 60%;
-      img{
+
+      img {
         width: 100%;
       }
     }
-    .title{
+
+    .title {
       margin-top: 1rem;
     }
-    .info{
+
+    .info {
       color: #999999;
       margin-top: .5rem;
 
     }
-    .btn{
-      box-shadow: inset 0 0 1px rgba(0,0,0,.08);
+
+    .btn {
+      box-shadow: inset 0 0 1px rgba(0, 0, 0, .08);
       border-radius: 2px;
       text-align: center;
       padding: 0 .6em;
       border: 0;
-      -webkit-tap-highlight-color: rgba(0,0,0,0);
-      background: #297ee6 -webkit-gradient(linear,0 0,0 100%,from(#2b83ef),to(#2677db));
+      -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+      background: #297ee6 -webkit-gradient(linear, 0 0, 0 100%, from(#2b83ef), to(#2677db));
       color: #fff;
       display: block;
       margin: 20px 50px 15px;
@@ -39,45 +45,58 @@
     }
   }
 
-  .main{
+  .main {
     padding-top: 2.7rem;
     display: flex;
     flex-direction: column;
     width: 100%;
-    .header{
+
+    .header {
       position: fixed;
       top: 0;
       width: 100%;
     }
-    .top{
+
+    .top {
       display: flex;
       align-items: center;
       box-sizing: border-box;
       padding: 1rem .6rem;
       background-color: #fff;
-      .headImg{
+
+      .headImg {
         height: 4rem;
         width: 4rem;
         background-size: cover;
         margin-right: .5rem;
-        img{
+
+        img {
           width: 4rem;
         }
       }
-      .right{
-        h5,p{
+
+      .right {
+        .title {
+          font-size: 1.2rem;
+        }
+
+        h5, p {
           margin: 0;
         }
-        .levelInfo{
+
+        .levelInfo {
           width: 6rem;
-          .level{
+
+          .level {
             margin: 0;
           }
-          .experience{
+
+          .experience {
             width: 100%;
             height: 4px;
             background-color: #cccccc;
-            .hasExperience{
+
+            .hasExperience {
               background-color: #00b49c;
               height: 100%;
               display: block;
@@ -85,23 +104,14 @@
           }
         }
       }
-/*      .info{
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        .title{
-          font-weight: normal;
-        }
-        p{
-          color: #aaaaaa;
-        }
-      }*/
-      .btn{
+
+      .btn {
         display: flex;
         justify-content: flex-end;
         align-items: center;
         margin-left: auto;
-        .follow{
+
+        .follow {
           border: 1px solid $mainColor;
           padding: .5rem .7rem;
           color: $mainColor;
@@ -109,7 +119,7 @@
       }
     }
 
-    .empty{
+    .empty {
       display: flex;
       justify-content: center;
       align-items: center;
@@ -117,23 +127,27 @@
       width: 100%;
       background-color: #fff;
     }
-    .posts{
-      .tab{
+
+    .posts {
+      .tab {
         display: flex;
         align-items: center;
         background-color: #fff;
         height: 2.5rem;
       }
 
-      .topPost{
+      .topPost {
         display: none;
       }
-      .container{
+
+      .container {
         width: 100%;
-        padding-top:.5rem;
-        ul{
+        margin-top: .5rem;
+
+        ul {
           width: 100%;
-          li{
+
+          .threadItem {
             width: 100%;
             background-color: #fff;
             display: flex;
@@ -141,44 +155,71 @@
             box-sizing: border-box;
             padding: .8rem 1rem;
             margin-top: .5rem;
-            &:nth-child(1){
+
+            &:nth-child(1) {
               margin-top: 0;
             }
-            .user{
+
+            .user {
               display: flex;
               align-items: center;
               margin-bottom: 1rem;
-              .headImg{
+
+              .headImg {
                 width: 2rem;
                 height: 2rem;
                 background-size: cover;
               }
-              .right{
+
+              .right {
                 margin-left: .5rem;
                 flex: 1;
                 display: flex;
                 flex-direction: column;
-                .name{
+
+                .name {
                   font-size: .9rem;
                 }
-                .time{
+
+                .time {
                   font-size: .8rem;
                   color: #999;
                 }
-                p{
+
+                p {
                   margin: 0;
                 }
               }
             }
-            .title{}
-            .footer{
+
+            .imgs {
+              margin-top: .5rem;
+              display: flex;
+              justify-content: space-between;
+              height: 4rem;
+
+              .imgItem {
+                display: block;
+                height: 100%;
+                width: 30%;
+                background-size: cover;
+
+              }
+            }
+
+            .title {
+            }
+
+            .footer {
               display: flex;
               justify-content: flex-end;
 
             }
-            .postCount{
+
+            .postCount {
               font-size: 1rem;
-              i{
+
+              i {
                 font-size: 1rem;
                 margin-right: .5rem;
               }
@@ -186,7 +227,8 @@
           }
         }
       }
-      .pager{
+
+      .pager {
         //margin-top: .5rem;
       }
     }

@@ -91,24 +91,6 @@ class Home extends React.Component<IProps, IState> {
       }
     ]
 
-    /*      <li onClick={this.switchTab.bind(this,HomeTab.dynamic)}>
-  <div className={style.num}>{data.postCount}</div>
-  <div className={style.info}>帖子</div>
-    </li>
-    <li onClick={this.switchTab.bind(this,HomeTab.tiebaFollow)}>
-  <div className={style.num}>{data.tiebaFollowCount}</div>
-  <div className={style.info}>贴吧</div>
-    </li>
-
-    <li onClick={this.switchTab.bind(this,HomeTab.follow)}>
-  <div className={style.num}>{data.followCount}</div>
-  <div className={style.info}>关注</div>
-    </li>
-    <li onClick={this.switchTab.bind(this,HomeTab.fans)}>
-  <div className={style.num}>{data.fansCount}</div>
-  <div className={style.info}>粉丝</div>
-    </li>*/
-
     return (
       <div className={style.Home}>
         <DarkHeader title={data.userName} />
@@ -160,9 +142,6 @@ class Home extends React.Component<IProps, IState> {
         </div>
         <div className={style.container}>
           {tab}
-          {/*          <div className={style.tieba}>tieba</div>
-          <div className={style.attention}>attention</div>
-          <div className={style.fens}>fens</div>*/}
         </div>
         <ImagePane
           onHide={this.handleImagePaneHide}

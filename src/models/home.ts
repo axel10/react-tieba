@@ -1,6 +1,6 @@
 import { Model } from 'dva'
 import * as _ from 'lodash'
-import { LoadAble } from 'src/types/Common/LoadAble'
+import { LoadAbleData } from 'src/types/Common/LoadAbleData'
 import { clone } from 'src/utils/utils'
 import { IAllState } from '..'
 import userService from '../services/userService'
@@ -11,10 +11,10 @@ import { UserListDto } from '../types/User/UserListDto'
 
 export interface IHomeState {
   homeData: UserHomeDto
-  tiebaFollows: LoadAble<TiebaFollowDto>
-  follows: LoadAble<UserListDto>
-  fans: LoadAble<UserListDto>
-  dynamics: LoadAble<UserDynamicDto>
+  tiebaFollows: LoadAbleData<TiebaFollowDto>
+  follows: LoadAbleData<UserListDto>
+  fans: LoadAbleData<UserListDto>
+  dynamics: LoadAbleData<UserDynamicDto>
   isLoading: boolean
   userId: number
   userName: string
@@ -22,10 +22,10 @@ export interface IHomeState {
 
 const initState: IHomeState = {
   homeData: new UserHomeDto(),
-  dynamics: new LoadAble(6),
-  tiebaFollows: new LoadAble(6),
-  follows: new LoadAble(9),
-  fans: new LoadAble(9),
+  dynamics: new LoadAbleData(6),
+  tiebaFollows: new LoadAbleData(6),
+  follows: new LoadAbleData(9),
+  fans: new LoadAbleData(9),
   isLoading: false,
   userId: null,
   userName: ''
@@ -41,7 +41,7 @@ const HomeModel: IModel = {
   state: _.cloneDeep(initState),
 
   effects: {
-    *init({ userName }, { put, call }) {
+    * init ({ userName }, { put, call }) {
       yield put({ type: 'setData', key: 'userName', val: userName })
       const homeData: UserHomeDto = yield call(
         userService.getHomeData,
@@ -49,9 +49,9 @@ const HomeModel: IModel = {
       )
       yield put({ type: 'setHomeData', homeData })
     },
-    *getData({ key, service }, { put, call, select }) {
+    * getData ({ key, service }, { put, call, select }) {
       const state: IHomeState = yield select((s: IAllState) => s.home)
-      const scrollable: LoadAble<object> = state[key]
+      const scrollable: LoadAbleData<object> = state[key]
       if (scrollable.isLoading) return
       const data = yield call(service, {
         pageSize: scrollable.pageSize,
@@ -87,7 +87,7 @@ const HomeModel: IModel = {
       yield put({ type: 'addScrollData', key, val: data })
     },
 
-    *follow({ userName }, { put, call, select }) {
+    * follow ({ userName }, { put, call, select }) {
       if (yield select((s: IAllState) => s.home.isLoading)) return
       yield put({ type: 'setData', key: 'isLoading', val: true })
 
@@ -95,7 +95,7 @@ const HomeModel: IModel = {
       yield put({ type: 'setIsFollow', b: true })
       yield put({ type: 'setData', key: 'isLoading', val: false })
     },
-    *cancelFollow({ userName }, { put, call, select }) {
+    * cancelFollow ({ userName }, { put, call, select }) {
       if (yield select((s: IAllState) => s.home.isLoading)) return
       yield put({ type: 'setData', key: 'isLoading', val: true })
       yield call(userService.cancelFollow, userName)
@@ -105,36 +105,36 @@ const HomeModel: IModel = {
   },
 
   reducers: {
-    setHomeData(state: IHomeState, { homeData }) {
+    setHomeData (state: IHomeState, { homeData }) {
       state.homeData = homeData
       return { ...state }
     },
-    setIsEmpty(state: IHomeState, { key, b }) {
-      const scrollable: LoadAble<object> = state[key]
+    setIsEmpty (state: IHomeState, { key, b }) {
+      const scrollable: LoadAbleData<object> = state[key]
       scrollable.isEmpty = b
       return { ...state }
     },
-    setData(state: IHomeState, { key, val }) {
+    setData (state: IHomeState, { key, val }) {
       state[key] = val
       return { ...state }
     },
-    addScrollData(state: IHomeState, { key, val }) {
-      const scrollAble: LoadAble<object> = state[key]
+    addScrollData (state: IHomeState, { key, val }) {
+      const scrollAble: LoadAbleData<object> = state[key]
       scrollAble.data = scrollAble.data.concat(val)
       if (val.length < scrollAble.pageSize) {
         scrollAble.isEnd = true
       }
       return { ...state }
     },
-    setIsFollow(state: IHomeState, { b }) {
+    setIsFollow (state: IHomeState, { b }) {
       state.homeData.isFollowed = b
       return { ...state }
     },
-    setLoading(state: IHomeState, { key, b }) {
+    setLoading (state: IHomeState, { key, b }) {
       state[key].isLoading = b
       return { ...state }
     },
-    reset(state: IHomeState) {
+    reset (state: IHomeState) {
       state = _.cloneDeep(initState)
       return { ...state }
     }

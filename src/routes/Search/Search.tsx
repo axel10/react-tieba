@@ -1,6 +1,5 @@
 import { connect } from 'dva'
 import React from 'react'
-import * as router from 'react-router-redux'
 import DarkHeader from 'src/components/Header/DarkHeader'
 import history from 'src/history'
 import { IBaseProps } from 'src/mixin/IBaseProps'
@@ -28,21 +27,21 @@ class Search extends React.Component<IProps, IState> {
 
   private searchInput: HTMLInputElement
 
-  public constructor(props) {
+  public constructor (props) {
     super(props)
     this.dispatch({ type: 'search/init' })
   }
 
-  public componentDidMount() {
+  public componentDidMount () {
     this.searchInput.focus()
   }
 
-  public render() {
+  public render () {
     const histories = this.props.search.histories
     const tips = this.props.search.tips
     return (
       <div className={style.Search}>
-        <DarkHeader title={'搜索'} />
+        <DarkHeader title={'搜索'}/>
         <div className={style.searchInput}>
           <div className={style.wrap}>
             <div className={style.input}>
@@ -119,7 +118,7 @@ class Search extends React.Component<IProps, IState> {
     )
   }
 
-  public componentWillUnmount() {
+  public componentWillUnmount () {
     this.dispatch({ type: 'search/reset' })
   }
 
@@ -144,8 +143,11 @@ class Search extends React.Component<IProps, IState> {
   private nav = () => {
     const word = this.state.searchWord
     if (word.length) {
-      this.dispatch({ type: 'search/addHistory', history: word })
       history.push(`/tieba/${word}`)
+
+      if (this.props.search.histories.indexOf(word) === -1) {
+        this.dispatch({ type: 'search/addHistory', history: word })
+      }
     } else {
       return
     }

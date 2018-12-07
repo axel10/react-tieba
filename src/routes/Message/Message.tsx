@@ -4,15 +4,15 @@ import React from 'react'
 import DarkHeader from 'src/components/Header/DarkHeader'
 import { IBaseProps } from 'src/mixin/IBaseProps'
 import userService from 'src/services/userService'
-import { LoadAble } from 'src/types/Common/LoadAble'
+import { LoadAbleData } from 'src/types/Common/LoadAbleData'
 import { MessageCountDto } from 'src/types/User/MessageCountDto'
 import { MessageDto } from 'src/types/User/MessageDto'
 import { MessageType } from 'src/utils/enum/MessageType'
 import style from './Message.scss'
 
 interface IState {
-  reply: LoadAble<MessageDto>
-  at: LoadAble<MessageDto>
+  reply: LoadAbleData<MessageDto>
+  at: LoadAbleData<MessageDto>
   currentTab: Tabs
   messageCount: MessageCountDto
 }
@@ -24,8 +24,8 @@ enum Tabs {
 
 class Message extends React.Component<IBaseProps, IState> {
   public state = {
-    reply: new LoadAble<MessageDto>(8),
-    at: new LoadAble<MessageDto>(8),
+    reply: new LoadAbleData<MessageDto>(8),
+    at: new LoadAbleData<MessageDto>(8),
     currentTab: Tabs.reply,
     messageCount: new MessageCountDto()
   }
@@ -168,7 +168,7 @@ class Message extends React.Component<IBaseProps, IState> {
 
   private switchTab = (type: Tabs) => {
     // this.setState({currentTab: type})
-    const data: LoadAble<any> = this.state[type]
+    const data: LoadAbleData<any> = this.state[type]
     const state: any = this.state
     this.setState({ currentTab: type })
     if (!data.isLoaded) {

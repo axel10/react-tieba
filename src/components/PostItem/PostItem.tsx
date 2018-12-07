@@ -18,12 +18,13 @@ interface IProps extends IBaseProps {
   type: PostType
   isTop?: boolean
   more: any
+  lzId?: number
 }
 
 class PostItem extends React.Component<IProps> {
   private dispatch = this.props.dispatch
 
-  public constructor(props) {
+  public constructor (props) {
     super(props)
     ;(window as any).toHome = (userName: string) => {
       userService.userIsExist(userName).then((o) => {
@@ -34,24 +35,28 @@ class PostItem extends React.Component<IProps> {
     }
   }
 
-  public render() {
+  public render () {
     let creator: UserListDto
     let content
     let followPosts
     let createTimeStr
     let followPostCount
     const isTop = this.props.isTop == null ? false : this.props.isTop
-    const postDto = this.props.postDto
-    const followPostDto = this.props.followPostDto
-    const threadDto = this.props.threadDto
+    const { followPostDto, threadDto, postDto, lzId } = this.props
+
+    let isLz = false
+    if (threadDto || (followPostDto && lzId === followPostDto.creator.id) || (postDto && postDto.creator.id === lzId)) {
+      isLz = true
+    }
+
     switch (this.props.type) {
       case PostType.post:
         creator = postDto.creator
         content = postDto.content
           ? postDto.content.replace(
-              /@([\u4e00-\u9fa5_a-zA-Z0-9]+)/g,
-              `<span onclick="toHome('$1')">@$1</span>`
-            )
+            /@([\u4e00-\u9fa5_a-zA-Z0-9]+)/g,
+            `<span onclick="toHome('$1')">@$1</span>`
+          )
           : ''
         followPosts = postDto.followPosts
         createTimeStr = postDto.createTimeStr
@@ -61,9 +66,9 @@ class PostItem extends React.Component<IProps> {
         creator = followPostDto.creator
         content = followPostDto.content
           ? followPostDto.content.replace(
-              /@([\u4e00-\u9fa5_a-zA-Z0-9]+)/g,
-              `<span onclick="toHome('$1')">@$1</span>`
-            )
+            /@([\u4e00-\u9fa5_a-zA-Z0-9]+)/g,
+            `<span onclick="toHome('$1')">@$1</span>`
+          )
           : ''
         createTimeStr = followPostDto.createTimeStr
         break
@@ -71,9 +76,9 @@ class PostItem extends React.Component<IProps> {
         creator = threadDto.creator
         content = threadDto.content
           ? threadDto.content.replace(
-              /@([\u4e00-\u9fa5_a-zA-Z0-9]+)/g,
-              `<span onclick="toHome('$1')">@$1</span>`
-            )
+            /@([\u4e00-\u9fa5_a-zA-Z0-9]+)/g,
+            `<span onclick="toHome('$1')">@$1</span>`
+          )
           : ''
         createTimeStr = threadDto.createTimeStr
     }
@@ -94,6 +99,9 @@ class PostItem extends React.Component<IProps> {
             <div className={style.center}>
               <p className={style.name}>
                 {creator.userName}
+                {
+                  isLz ? (<span className={style.lzIcon}>楼主</span>) : ''
+                }
                 <span className={style.level}>{creator.level}</span>
               </p>
               <p className={style.time}>{createTimeStr}</p>
@@ -103,7 +111,7 @@ class PostItem extends React.Component<IProps> {
 
           <div className={isTop ? style.topContent : style.postContent}>
             <div className={style.content}>
-              <div dangerouslySetInnerHTML={{ __html: content }} />
+              <div dangerouslySetInnerHTML={{ __html: content }}/>
             </div>
             {followPosts && followPosts.length ? (
               <div className={style.followPosts}>
@@ -136,33 +144,6 @@ class PostItem extends React.Component<IProps> {
     )
   }
 
-  /*  private showPostDropDown = (e) => {
-    const id = this.props.postDto ? this.props.postDto.id : this.props.followPostDto.id
-    this.dispatch({ type: 'post/setData', key: 'currentPostId', val: id })
-    const that = this
-    const el = e.currentTarget as HTMLElement
-    setTimeout(() => {
-      dropDownList([{
-        label: '回复', callback () {
-          that.dispatch({ type: 'post/setData', key: 'isShowFollowPostInput', val: true })
-        }
-      }], el, dropDownPosition.leftBottom)
-    })
-  }
-  private handlePostInputShow = () => {
-    this.dispatch({ type: 'post/setData', key: 'isShowPostInput', val: true })
-  }
-  private showThreadDropDown = () => {
-  }
-  private showFollowPostDropDown = (e) => {
-    const that = this
-    const el = e.currentTarget as HTMLElement
-    dropDownList([{
-      label: '回复', callback () {
-        that.dispatch({ type: 'followPost/setData', key: 'isShowFollowPostInput', val: true })
-      }
-    }], el, dropDownPosition.leftBottom)
-  }*/
   private toMoreFollowPost = () => {
     history.push(`/t/p/${this.props.postDto.id}`)
   }

@@ -128,7 +128,6 @@ class EditUser extends React.Component<IBaseProps, IState> {
     formData.append('Sex', data.sex.toString())
     formData.append('Summary', data.summary)
     formData.append('files', this.state.file)
-    console.log(formData)
 
     userService.editUserData(formData).then(() => {
       Message.toast('修改成功')

@@ -1,5 +1,7 @@
 import qs from 'qs'
 import React from 'react'
+import ReactDOM from 'react-dom'
+import LoginDialog from 'src/components/LoginDialog/LoginDialog'
 import { Toast } from 'src/utils/components/toast'
 import history from '../history'
 
@@ -292,6 +294,7 @@ export function whichTransitionEvent () {
  */
 export function showLoadingTip (tip: string = '正在加载') {
   const tipEl: HTMLElement = Toast(tip)
+
   function hideTip (hideTipEl: HTMLElement) {
     hideTipEl.style.opacity = '0'
     setTimeout(() => {
@@ -306,7 +309,7 @@ export function showLoadingTip (tip: string = '正在加载') {
     }, 2000)
   }
 
-  return (doneTip: string= '加载成功') => {
+  return (doneTip: string = '加载成功') => {
     hideTip(tipEl)
     if (doneTip) {
       setTimeout(() => {
@@ -329,7 +332,7 @@ export function toast (title: string) {
     toastEl.style.opacity = '0'
     setTimeout(() => {
       document.body.removeChild(toastEl)
-    },300)
+    }, 300)
   }, 2000)
 }
 
@@ -339,9 +342,35 @@ export function requireLogin (fromPath: string) {
 }
 
 export function getQueryStringParams () {
-  return qs.parse(history.location.search.replace('?',''))
+  return qs.parse(history.location.search.replace('?', ''))
 }
 
 export function stringifyQueryStringParams (obj) {
   return qs.stringify(obj)
+}
+
+export function showLoginDialog () {
+  const wrap = document.createElement('div')
+  wrap.className = 'g-mask'
+  document.body.appendChild(wrap)
+
+  function close () {
+    ReactDOM.unmountComponentAtNode(wrap)
+    document.body.removeChild(wrap)
+  }
+
+  ReactDOM.render(<LoginDialog close={close}/>, wrap)
+
+  return close
+
+}
+
+
+
+export function pack (model) {
+  model.reducers.setData = (state: any, { key, val }) => {
+    state[key] = val
+    return { ...state }
+  }
+  return model
 }

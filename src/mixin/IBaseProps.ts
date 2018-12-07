@@ -3,8 +3,12 @@ import { match } from 'react-router'
 import { Dispatch } from 'redux'
 
 export interface IBaseProps {
-  dispatch: Dispatch
-  history: History
-  match: match<any>
-  location: Location
+  dispatch?: Dispatch
+  history?: History
+  match?: match<any>
+  location?: Location
+  loading?: {
+    global: boolean
+    models: any
+  }
 }

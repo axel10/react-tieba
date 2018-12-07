@@ -4,7 +4,6 @@ import history from 'src/history'
 import { clearToast, toast } from 'src/utils/utils'
 
 function checkStatus (error: AxiosError) {
-  console.log(error.response)
   throw error
 /*  if (error.response.status === 499) {
     clearToast()

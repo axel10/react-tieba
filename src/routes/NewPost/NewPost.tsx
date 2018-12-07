@@ -2,6 +2,7 @@ import { connect } from 'dva'
 import React from 'react'
 import { withRouter } from 'react-router-dom'
 import { IBaseProps } from 'src/mixin/IBaseProps'
+import { ICommonState } from 'src/models/common'
 import { IPostState } from 'src/models/post'
 import { PostType } from 'src/utils/enum/PostType'
 import { getTotalPage, showLoadingTip, toast, triggerClick } from 'src/utils/utils'
@@ -10,7 +11,6 @@ import history from '../../history'
 import postService from '../../services/postService'
 import Message from '../../utils/Message'
 import style from './NewPost.scss'
-import { ICommonState } from 'src/models/common'
 
 interface IState {
   title: string
@@ -24,7 +24,7 @@ interface IProps extends IBaseProps {
   post: IPostState
   postId?: number
   initContent: string
-  common:ICommonState
+  common: ICommonState
   onSend (): void
   onHide (): void
 }
@@ -36,6 +36,9 @@ class NewPost extends React.Component<IProps, IState> {
     files: [],
     thumbs: []
   }
+
+  private dispatch = this.props.dispatch
+  private contentInput: HTMLTextAreaElement
 
 /*
   componentDidMount () {
@@ -49,15 +52,10 @@ class NewPost extends React.Component<IProps, IState> {
   }
 */
 
-
   constructor (props) {
     super(props)
 
   }
-
-
-  private dispatch = this.props.dispatch
-  private contentInput: HTMLTextAreaElement
 
   public render () {
     const thumbs = this.state.thumbs
@@ -185,7 +183,6 @@ class NewPost extends React.Component<IProps, IState> {
   }
   private submit = () => {
     this.setState({ content: this.contentInput.value })
-    console.log(this.contentInput.value)
 
     setTimeout(() => {
       const state = this.state
@@ -214,7 +211,7 @@ class NewPost extends React.Component<IProps, IState> {
         postService.createThread(formData).then((res) => {
           if (res) {
             this.dispatch({ type: 'tieba/jump', pageNo: 1 })
-            history.push(`/tieba/${tiebaTitle}`)
+            history.replace(`/tieba/${tiebaTitle}`)
             done('发帖成功')
           }
         })
@@ -228,8 +225,8 @@ class NewPost extends React.Component<IProps, IState> {
             const post = this.props.post
             const params = this.props.match.params
             const totalPage = getTotalPage(post.pageSize, post.count)
-            history.push(`/p/${params.threadId}/${totalPage}`)
-            this.dispatch({ type: 'post/getPosts', params })
+            history.replace(`/p/${params.threadId}/${totalPage}`)
+            this.dispatch({ type: 'post/init', params })
             this.props.onSend()
             done()
           }

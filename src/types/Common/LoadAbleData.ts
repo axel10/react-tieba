@@ -1,5 +1,5 @@
-export class LoadAble<T> {
-  set data(val: T[]) {
+export class LoadAbleData<T> {
+  set data (val: T[]) {
     this._data = val
     if (this._data.length === 0 && val.length === 0) {
       this.isEmpty = true
@@ -8,10 +8,13 @@ export class LoadAble<T> {
       this.isEmpty = false
     }
     this.isLoaded = true
+    this.isLoading = false
   }
-  get data() {
+
+  get data () {
     return this._data
   }
+
   public isLoaded!: boolean
   public isEnd!: boolean
   public pageSize!: number
@@ -20,7 +23,7 @@ export class LoadAble<T> {
   public isEmpty!: boolean
   private _data!: T[]
 
-  constructor(size: number) {
+  constructor (size: number) {
     this.data = []
     this.isLoaded = false
     this.isEnd = false

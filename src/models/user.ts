@@ -8,7 +8,7 @@ export interface IUserState {
   }
   confirmPassword: string
   isAgree: boolean
-  errorMsg:string
+  errorMsg: string
 }
 
 export interface IModel extends Model {
@@ -25,34 +25,34 @@ const UserModel: IModel = {
     },
     confirmPassword: '',
     isAgree: false,
-    errorMsg:''
+    errorMsg: ''
   },
 
   effects: {
-    *login(payload, {put, call, select }) {
+/*    *login(payload, {put, call, select }) {
       const state: IUserState = yield select((s) => s.index)
       const form = state.form
       yield call(userService.login, form.username, form.password)
-
-
-/*      userService
-        .login(this.state.form)
-        .catch((e) => {
-          if (e.response.status === 499) {
-            // this.setState({ errorMsg: e.response.data.ErrorMsg })
-          }
-          throw e
-        })
-        .then(() => {
-          Message.toast('登陆成功！')
-          history.push(this.state.fromPath)
-        })
-      */
-
+      const res =  yield put({type:'common/setIsLogin',b:true})
+      console.log(res)
+      console.log('login')
+      /!*      userService
+              .login(this.state.form)
+              .catch((e) => {
+                if (e.response.status === 499) {
+                  // this.setState({ errorMsg: e.response.data.ErrorMsg })
+                }
+                throw e
+              })
+              .then(() => {
+                Message.toast('登陆成功！')
+                history.push(this.state.fromPath)
+              })
+            *!/
 
       // history.push(state.fromUrl)
-    },
-    *register({ username, password }, { call, select }) {
+    },*/
+    *register ({ username, password }, { call, select }) {
       // const state: IUserState = yield select(s => s.user)
       // const form = state.form
       yield call(userService.register, username, password)
@@ -61,11 +61,11 @@ const UserModel: IModel = {
   },
 
   reducers: {
-    bindState(state: IUserState, { key, val }) {
+    bindState (state: IUserState, { key, val }) {
       state[key] = val
       return { ...state }
     },
-    bindField(state: IUserState, { key, val }) {
+    bindField (state: IUserState, { key, val }) {
       state.form[key] = val
       return { ...state }
     }

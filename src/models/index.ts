@@ -37,7 +37,6 @@ const IndexModel: IModel = {
         yield put({ type: 'getFollowTieba', data })
         yield put({ type: 'setIsLogin', b: true })
       } catch (e) {
-        console.log(e)
         yield put({ type: 'setIsLogin', b: false })
       }
     },

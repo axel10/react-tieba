@@ -6,9 +6,6 @@ import { Link } from 'react-router-dom'
 import tiebaService from 'src/services/tiebaService'
 
 export default class Test extends React.Component {
-  public componentDidMount () {
-    console.log(this.props)
-  }
 
   public render () {
     function MyComp (args) {

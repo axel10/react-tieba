@@ -19,7 +19,6 @@ const CommonModel: IModel = {
   effects: {
     * checkIsLogin (p, { put, call }) {
       const result = yield call(userService.checkIsLogin)
-      console.log(result)
       yield put({ type: 'setIsLogin', b: result.data })
     }
   },

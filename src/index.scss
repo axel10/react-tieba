@@ -68,6 +68,16 @@
     transform:translate(-50%,-50%);
   }
 
+  .g-mask{
+    background-color: rgba(0,0,0,.7);
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+  }
+
   .transitionLeft-enter{
     transform:translateX(100%);
   }

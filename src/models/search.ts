@@ -33,7 +33,6 @@ const search: IModel = {
     },
     *init(p, { put }) {
       const history = localStorage.getItem('search_history')
-      console.log(history)
       if (history) {
         yield put({
           type: 'setData',

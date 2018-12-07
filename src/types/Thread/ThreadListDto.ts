@@ -8,4 +8,5 @@ export class ThreadListDto {
   public postCount: number
   public title: string
   public creator: UserListDto
+  public imgs?: string[]
 }

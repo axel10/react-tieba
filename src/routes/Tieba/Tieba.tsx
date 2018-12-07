@@ -1,6 +1,9 @@
 import { connect } from 'dva'
+import { uniqueId } from 'lodash'
 import React from 'react'
 import { Link } from 'react-router-dom'
+import Button from 'src/components/Button/Button'
+import LoadingContainer from 'src/components/Common/LoadingContainer'
 import DarkHeader from 'src/components/Header/DarkHeader'
 import WhiteHeader from 'src/components/Header/WhiteHeader'
 import Pager from 'src/components/Pager/Pager'
@@ -10,7 +13,7 @@ import { IBaseProps } from 'src/mixin/IBaseProps'
 import { ICommonState } from 'src/models/common'
 import { ITiebaState } from 'src/models/tieba'
 import { ThreadListDto } from 'src/types/Thread/ThreadListDto'
-import { historyPush, requireLogin, showLoadingTip, toast } from 'src/utils/utils'
+import { historyPush, requireLogin, showLoadingTip, showLoginDialog, toast } from 'src/utils/utils'
 import style from './Tieba.scss'
 
 interface IProps extends IBaseProps {
@@ -21,13 +24,6 @@ interface IProps extends IBaseProps {
 interface IState {
   isShowPopup: boolean
   popupItems: IPopupItem[]
-}
-
-let position = 0
-
-function handleScroll () {
-  console.log(window.scrollY)
-  position = window.scrollY
 }
 
 class Tieba extends React.Component<IProps, IState> {
@@ -57,32 +53,25 @@ class Tieba extends React.Component<IProps, IState> {
 
   private hasExperience: HTMLElement = null
 
-  public componentWillUnmount () {
-    console.log('unmount')
-  }
-
-  public componentDidMount () {
-    this.dispatch({
-      type: 'tieba/setTitle',
-      title: this.props.match.params.title
-    })
-    this.dispatch({ type: 'tieba/init' })
-
-    console.log(position)
+  constructor (props) {
+    super(props)
+    // this.dispatch({type:'tieba/reset'})
+    this.dispatch({ type: 'tieba/init',title:this.props.match.params.title })
   }
 
   public render () {
     const {
       hasTieba,
       levelInfo,
-      title,
       followCount,
       postCount,
       headImg,
       isCanSign
     } = this.props.tieba.tiebaInfo
     const isFollow = levelInfo !== null
+    const {title} = this.props.match.params
 
+    const loading = this.props.loading.models.tieba
     const {
       data: threads,
       pageNo,
@@ -154,10 +143,15 @@ class Tieba extends React.Component<IProps, IState> {
                     <div className={style.follow}>已签到</div>
                   )
                 ) : (
-                  <div className={style.follow} onClick={this.follow}>
+
+                  <Button onClick={this.follow}>
                     关注
-                  </div>
-                )}
+                  </Button>)}
+
+                {/*<div className={style.follow} onClick={this.follow}>
+                    关注
+                  </div>*/}
+
               </div>
             </div>
 
@@ -166,37 +160,50 @@ class Tieba extends React.Component<IProps, IState> {
             ) : (
               <div className={style.posts}>
                 <div className={style.container}>
-                  <ul>
-                    {threads.map((o: ThreadListDto, i) => (
-                      <li
-                        className={style.postItem}
-                        key={i}
-                        onClick={this.toPost.bind(this, o.id)}
-                      >
-                        <div className={style.user}>
-                          <div
-                            className={style.headImg}
-                            style={{
-                              backgroundImage: o.creator.headImg
-                                ? `url(${o.creator.headImg})`
-                                : ''
-                            }}
-                          />
-                          <div className={style.right}>
-                            <p className={style.name}>{o.creator.userName}</p>
-                            <p className={style.time}>{o.createTimeStr}</p>
+                  <LoadingContainer loading={loading}>
+                    <ul>
+                      {threads.map((o: ThreadListDto, i) => (
+                        <li
+                          className={style.threadItem}
+                          key={i}
+                          onClick={this.toPost.bind(this, o.id)}
+                        >
+                          <div className={style.user}>
+                            <div
+                              className={style.headImg}
+                              style={{
+                                backgroundImage: o.creator.headImg
+                                  ? `url(${o.creator.headImg})`
+                                  : ''
+                              }}
+                            />
+                            <div className={style.right}>
+                              <p className={style.name}>{o.creator.userName}</p>
+                              <p className={style.time}>{o.createTimeStr}</p>
+                            </div>
                           </div>
-                        </div>
-                        <div className={style.title}>{o.title}</div>
-                        <div className={style.footer}>
+                          <div className={style.title}>{o.title}</div>
+                          {
+                            o.imgs.length ? (
+                              <div className={style.imgs}>
+                                {
+                                  o.imgs.map((img) => (
+                                    <div className={style.imgItem} style={{ backgroundImage: `url(${img})` }} key={uniqueId()}/>
+                                  ))
+                                }
+                              </div>
+                            ) : ''
+                          }
+                          <div className={style.footer}>
                           <span className={style.postCount}>
                             <i className='iconfont icon-message'/>
                             {o.postCount}
                           </span>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </LoadingContainer>
                 </div>
                 <div className={style.pager}>
                   <Pager
@@ -249,9 +256,16 @@ class Tieba extends React.Component<IProps, IState> {
     this.dispatch({ type: 'tieba/create', params: this.props.match.params })
   }
   private follow = () => {
-    (this.dispatch({ type: 'tieba/follow' }) as any).then(() => {
-      toast('关注成功！')
-    })
+
+    const { isLogin } = this.props.common
+    if (isLogin) {
+      (this.dispatch({ type: 'tieba/follow' }) as any).then(() => {
+        toast('关注成功！')
+      })
+    } else {
+      showLoginDialog()
+    }
+
   }
   private sign = () => {
     (this.dispatch({ type: 'tieba/sign' }) as any).then(() => {
@@ -265,7 +279,6 @@ class Tieba extends React.Component<IProps, IState> {
   private jumpPage = (pageNo: number) => {
     const done = showLoadingTip()
     const res: any = this.dispatch({ type: 'tieba/jump', pageNo })
-    console.log(res)
     res.then(() => {
       done('')
     })

@@ -1,8 +1,9 @@
-import axios, { AxiosError } from 'axios'
-import dva from 'dva'
-import { createBrowserHistory as createHistory } from 'history'
+import axios from 'axios'
+import dva, { DvaInstance } from 'dva'
+import createLoading from 'dva-loading'
 import * as React from 'react'
 import { Dispatch } from 'redux'
+import history from 'src/history'
 import common, { ICommonState } from 'src/models/common'
 import config from 'src/utils/config'
 import './index.scss'
@@ -16,32 +17,46 @@ import tieCollection, { ITieCollectionState } from './models/tieCollection'
 import user, { IUserState } from './models/user'
 import { routes } from './router'
 
-import history from 'src/history'
-import Message from 'src/utils/Message'
-import { clearToast, toast } from 'src/utils/utils'
+export interface IDvaInstance extends DvaInstance {
+  _store?: any
+}
 
 // 1. Initialize
-const app = dva({
+export const app: IDvaInstance = dva({
   history
 })
 
 const positionRecord = {}
-const historyKeys = [history.location.key]
+let historyKeys = history.location.key ? [history.location.key] : ['']
 let lastPathname = history.location.pathname
 
-history.listen(((location1, action) => {
+let currentHistoryPosition = 0
 
-  if (lastPathname === history.location.pathname) {
+history.listen((() => {
+/*  if (lastPathname === history.location.pathname) {
+    return
+  }*/
+  if (history.location.state && history.location.state.noAnimate) {
+    setTimeout(()=>{
+      const wrap = document.getElementById('routeWrap')
+      const newPage = wrap.children[0] as HTMLElement
+      const oldPage = wrap.children[1] as HTMLElement
+      newPage.style.opacity = '1'
+      oldPage.style.display = 'none'
+    })
     return
   }
+  const { action } = history
 
-  const currentRouterKey = history.location.key
+  const currentRouterKey = history.location.key ? history.location.key : ''
   const oldScrollTop = window.scrollY
   const originPage = document.getElementById('routeWrap').children[0] as HTMLElement
+  const oPosition = originPage.style.position
   originPage.style.position = 'fixed'
   originPage.style.top = -oldScrollTop + 'px'
-
-  console.log(currentRouterKey)
+  setTimeout(() => {
+    originPage.style.position = oPosition
+  }, config.routeAnimationDuration)
 
   setTimeout(() => {
     const wrap = document.getElementById('routeWrap')
@@ -55,22 +70,15 @@ history.listen(((location1, action) => {
     }
     const currentPath = history.location.pathname
 
-    const lastKey = historyKeys[historyKeys.length - 1]
-    const lastPrevKey = historyKeys[historyKeys.length - 2]
+    const isForward = historyKeys[currentHistoryPosition + 1] === currentRouterKey
 
-/*    if (lastPrevKey === currentRouterKey) {
-      console.log('back')
-    }*/
-    if (lastKey === currentRouterKey) {
-      console.log('forward')
-    }
-
-    if (action === 'PUSH' || lastKey === currentRouterKey) {
+    if (action === 'PUSH' || isForward) {
       // oldPage.style.top = `-${oldScrollTop}px`
       positionRecord[lastPathname] = oldScrollTop
       window.scrollTo({ top: 0 })
 
-      if (lastKey !== currentRouterKey) {
+      if (action === 'PUSH') {
+        historyKeys = historyKeys.slice(0, currentHistoryPosition + 1)
         historyKeys.push(currentRouterKey)
       }
     } else {
@@ -80,7 +88,6 @@ history.listen(((location1, action) => {
 
       // 删除列表路由的所有子路由滚动记录
       for (const key in positionRecord) {
-        console.log(key)
         if (key === currentPath) {
           continue
         }
@@ -90,10 +97,14 @@ history.listen(((location1, action) => {
       }
     }
 
+    if (action === 'REPLACE') {
+      historyKeys[currentHistoryPosition] = currentRouterKey
+    }
+
     newPage.style.width = '100%'
     oldPage.style.width = '100%'
     newPage.style.top = '0px'
-    if (action === 'PUSH' || lastKey === currentRouterKey) {
+    if (action === 'PUSH' || isForward) {
       newPage.style.left = '100%'
       oldPage.style.left = '0'
 
@@ -116,7 +127,7 @@ history.listen(((location1, action) => {
         newPage.style.opacity = '1'
       }, 50)
     }
-    console.log(historyKeys)
+    currentHistoryPosition = historyKeys.indexOf(currentRouterKey)
 
     lastPathname = history.location.pathname
 
@@ -166,6 +177,7 @@ export interface IAllState {
 
 // 4. Router
 app.router(routes)
+app.use(createLoading())
 
 // axios.defaults.baseURL = 'https://api.tieba.axel10.com'
 axios.defaults.baseURL = config.baseUrl

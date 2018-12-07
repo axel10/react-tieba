@@ -1,4 +1,4 @@
 react-tieba
 =========================
 
-Baidu post bar react+typescript demo
+百度贴吧的react+dva.js实现。

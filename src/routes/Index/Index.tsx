@@ -1,7 +1,6 @@
 import { connect } from 'dva'
 import React from 'react'
-import { Link, Route, Router, Switch } from 'react-router-dom'
-import { AnimatedSwitch } from 'react-router-transition'
+import { Link } from 'react-router-dom'
 import TiebaTab from 'src/components/Common/TiebaTab/TiebaTab'
 import { IBaseProps } from 'src/mixin/IBaseProps'
 import { MessageCountDto } from 'src/types/User/MessageCountDto'
@@ -85,7 +84,7 @@ class Index extends React.Component<IBaseProps, IState> {
         />
 
         <TiebaTab tabs={[
-          { key: 'recommend',component: <Recommend/>,label: '推荐' },
+          { key: 'recommend',component: <Recommend/>,label: '推荐',isFull:true },
           { key: '',component: <IndexTab/>,label: '首页' },
           { key: 'user',component: <UserTab/>,label: '我的' }
         ]} {...this.props} />

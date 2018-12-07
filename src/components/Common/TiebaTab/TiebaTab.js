@@ -1,9 +1,8 @@
 import * as React from "react";
 import Swiper from "swiper";
 import _ from "lodash";
-import { getQueryStringParams, stringifyQueryStringParams, whichTransitionEvent } from "src/utils/utils";
+import { getQueryStringParams, offsetTop, stringifyQueryStringParams, whichTransitionEvent } from "src/utils/utils";
 import history from "src/history";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
 import style from "./TiebaTab.scss";
 
 export default class TiebaTab extends React.Component {
@@ -28,7 +27,6 @@ export default class TiebaTab extends React.Component {
     swiper: null,
     isAnime: false
   };
-
 
   componentDidMount() {
     const { tabs, currentKey } = this.state;
@@ -86,7 +84,7 @@ export default class TiebaTab extends React.Component {
     swiper.slideTo(tabIndex, 500, true);
 /*    setTimeout(() => {
       this.changeStrip(currentIndex, tabIndex);
-    });*/
+    }); */
   };
 
   changeStrip = (currentIndex, targetIndex) => {
@@ -119,8 +117,11 @@ export default class TiebaTab extends React.Component {
 
   render() {
     const { tabs } = this.state;
-    console.log(tabs);
-    const { key } = getQueryStringParams();
+
+    const tabHeight = this.tabBar?document.documentElement.clientHeight-(this.tabBar.offsetHeight+offsetTop(this.tabBar)):0
+    if (this.tabBar) {
+    }
+
     return (
       <div className={style.tiebaTab}>
         <div className={style.tabBar}>
@@ -158,7 +159,7 @@ export default class TiebaTab extends React.Component {
             timeout={60000}
             classNames={"test"}
             key={key}
-          >*/}
+          > */}
         <div
           className={`${style.container} swiper-container`}
           ref={(ref) => {
@@ -169,7 +170,7 @@ export default class TiebaTab extends React.Component {
           <div className="swiper-wrapper" style={{minHeight:'100%'}}>
             {
               tabs.map((o) => (
-                <div key={_.uniqueId()} className="swiper-slide" id={o.key} style={{minHeight:'100%'}}>
+                <div key={_.uniqueId()} className="swiper-slide" id={o.key} style={{height:o.isFull?tabHeight:'auto'}}>
                   {
                     o.isLoaded ? o.component : ""
                   }
@@ -179,7 +180,7 @@ export default class TiebaTab extends React.Component {
           </div>
         </div>
         {/*          </CSSTransition>
-        </TransitionGroup>*/}
+        </TransitionGroup> */}
       </div>
     );
   }

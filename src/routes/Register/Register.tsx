@@ -157,7 +157,6 @@ class Register extends React.Component<IProps, IState> {
         userService
           .register(this.state.form.username, this.state.form.password)
           .catch((e) => {
-            console.log(JSON.parse(JSON.stringify(e)))
             this.setState({ errorMsg: e.response.data.ErrorMsg })
           })
           .then((o) => {

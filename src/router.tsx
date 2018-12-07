@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { Route, Router, Switch } from 'react-router-dom'
-import ScrollMemory from 'react-router-scroll-memory'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import history from './history'
 import EditUser from './routes/EditUser/EditUser'
@@ -16,17 +15,17 @@ import Search from './routes/Search/Search'
 import Test from './routes/Test/Test'
 import Tieba from './routes/Tieba/Tieba'
 import TieCollection from './routes/TieCollection/TieCollection'
+import config from 'src/utils/config'
 
 export const routes = () => {
   return (
     <Router history={history}>
       <Route render={(params) => {
         const { location } = params
-        console.log(location.key)
         return (
           <React.Fragment>
             <TransitionGroup style={{ width: '100%',height:'100%'}} id={'routeWrap'}>
-              <CSSTransition classNames={'router'} timeout={350} key={location.pathname}>
+              <CSSTransition classNames={'router'} timeout={config.routeAnimationDuration} key={location.pathname}>
                 <Switch location={location} key={location.pathname}>
                   <Route path='/test/:param?' component={Test}/>
                   <Route path='/tieba/:title' component={Tieba}/>
@@ -35,7 +34,9 @@ export const routes = () => {
                   <Route path='/register' component={Register}/>
                   <Route path='/newPost/:tieba' component={NewPost}/>
                   <Route
-                    path='/p/:threadId/:pageNo?/:isSeeLz?/:postId?'
+                    // path='/p/:threadId/:pageNo?/:isSeeLz?/:postId?'
+                    exact={true}
+                    path='/p/:threadId/:pageNo?'
                     component={Post}
                   />
                   <Route path='/t/p/:postId' component={FollowPost}/>

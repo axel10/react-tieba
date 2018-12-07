@@ -4,6 +4,7 @@ const merge = require('webpack-merge');
 const commonConfig = require('./webpack.base.js');
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
+
 module.exports = function () {
   return merge(commonConfig, {
     devtool: 'source-map',
@@ -24,7 +25,11 @@ module.exports = function () {
       new CopyWebpackPlugin([
         {from:path.resolve(__dirname,'../src/assets'),to:path.resolve(__dirname,'../hot')},
         {from:path.resolve(__dirname,'../public'),to:path.resolve(__dirname,'../hot')}
-      ])
+      ]),
+      new webpack.DefinePlugin({
+        ISDEV:JSON.stringify(true),
+        ISPROD:JSON.stringify(false),
+      })
     ]
   });
 };

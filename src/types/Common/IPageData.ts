@@ -1,4 +1,4 @@
 export interface IPageData {
-  data: []
+  data: any[]
   total: number
 }
