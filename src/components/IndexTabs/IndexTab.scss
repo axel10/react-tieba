@@ -41,6 +41,12 @@
             border-right: 1px solid #ccc;
           }
         }
+        &:nth-child(even){
+          .title{
+            padding-left: 1rem;
+            box-sizing: border-box;
+          }
+        }
       }
     }
     .open{

@@ -138,11 +138,11 @@ class Tieba extends React.Component<IProps, IState> {
               <div className={style.btn}>
                 {isFollow ? (
                   isCanSign ? (
-                    <div className={style.follow} onClick={this.sign}>
+                    <Button onClick={this.sign}>
                       签到
-                    </div>
+                    </Button>
                   ) : (
-                    <div className={style.follow}>已签到</div>
+                    <Button>已签到</Button>
                   )
                 ) : (
 
