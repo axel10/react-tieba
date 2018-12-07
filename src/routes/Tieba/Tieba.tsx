@@ -56,7 +56,9 @@ class Tieba extends React.Component<IProps, IState> {
   constructor (props) {
     super(props)
     // this.dispatch({type:'tieba/reset'})
-    this.dispatch({ type: 'tieba/init',title:this.props.match.params.title })
+    if (!this.props.tieba.tiebaInfo.title) {
+      this.dispatch({ type: 'tieba/init',title:this.props.match.params.title })
+    }
   }
 
   public render () {

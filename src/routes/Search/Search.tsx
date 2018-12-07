@@ -46,7 +46,7 @@ class Search extends React.Component<IProps, IState> {
           <div className={style.wrap}>
             <div className={style.input}>
               <input
-                type="text"
+                type='text'
                 onInput={this.handleSearchInput}
                 value={this.state.searchWord}
                 ref={(o) => {
@@ -62,7 +62,7 @@ class Search extends React.Component<IProps, IState> {
                 ''
               )}
             </div>
-            <div className={style.btn} onClick={this.nav}>
+            <div className={style.btn} onClick={this.nav()}>
               进吧
             </div>
           </div>
@@ -81,7 +81,7 @@ class Search extends React.Component<IProps, IState> {
                   <li
                     className={style.tip}
                     key={i}
-                    onClick={this.jump.bind(this, o)}
+                    onClick={this.nav(o.title)}
                   >
                     {o.title}
                   </li>
@@ -101,7 +101,7 @@ class Search extends React.Component<IProps, IState> {
                     <li
                       className={style.item}
                       key={i}
-                      onClick={historyPush.bind(this, `/tieba/${o}`)}
+                      onClick={this.nav(o)}
                     >
                       <p className={style.title}>{o}</p>
                     </li>
@@ -136,12 +136,13 @@ class Search extends React.Component<IProps, IState> {
     }, 300)
     this.setState({ timer })
   }
-  private jump = (item: TiebaTitleTip) => {
-    this.setState({ searchWord: item.title })
-    this.nav()
-  }
-  private nav = () => {
-    const word = this.state.searchWord
+
+  private nav = (word?) => () => {
+    if (!word) {
+      word = this.searchInput.value
+    }
+    this.props.dispatch({ type: 'tieba/reset' })
+
     if (word.length) {
       history.push(`/tieba/${word}`)
 
