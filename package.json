@@ -3,8 +3,8 @@
   "description": "Baidu post bar react+typescript demo",
   "private": true,
   "scripts": {
-    "dev": "webpack-dev-server --config build/webpack.dev.js",
-    "build": "webpack --mode production",
+    "dev": "webpack-dev-server --progress --colors --config build/webpack.dev.js",
+    "build": "webpack --progress --colors --mode production",
     "tslint:fix": "tslint --fix \"src/**/*.{ts,tsx}\" ",
     "analyz": "NODE_ENV=production npm_config_report=true npm run build"
   },

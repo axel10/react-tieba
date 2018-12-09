@@ -1,5 +1,5 @@
 declare module '*.scss'
 declare module 'src*'
 
-declare var ISDEV: boolean
-declare var ISPROD: boolean
+declare const ISDEV: boolean
+declare const ISPROD: boolean

@@ -25,19 +25,30 @@ export interface IDvaInstance extends DvaInstance {
 export const app: IDvaInstance = dva({
   history
 })
-
-const positionRecord = {}
-let historyKeys = history.location.key ? [history.location.key] : ['']
 let lastPathname = history.location.pathname
+const positionRecord = {}
+let isAnimating = false
+let bodyOverflowX = ''
+let historyKeys = history.location.key ? [history.location.key] : ['']
 
-let currentHistoryPosition = 0
-
+let currentHistoryPosition = historyKeys.indexOf(history.location.key)
+currentHistoryPosition = currentHistoryPosition === -1 ? 0 : currentHistoryPosition
 history.listen((() => {
-/*  if (lastPathname === history.location.pathname) {
-    return
-  }*/
-  if (history.location.state && history.location.state.noAnimate) {
-    setTimeout(()=>{
+  if (!history.location.key) {  // 目标页为初始页
+    historyKeys[0] = ''
+  }
+  const delay = 50 // 适当的延时以保证动画生效
+  if (!isAnimating) { // 如果正在进行路由动画则不改变之前记录的bodyOverflowX
+    bodyOverflowX = document.body.style.overflowX
+  }
+  setTimeout(() => { // 动画结束后还原相关属性
+    document.body.style.overflowX = bodyOverflowX
+    isAnimating = false
+  }, config.routeAnimationDuration + delay)
+  document.body.style.overflowX = 'hidden' // 防止动画导致横向滚动条出现
+
+  if (history.location.state && history.location.state.noAnimate) { // 如果指定不要发生路由动画则让新页面直接出现
+    setTimeout(() => {
       const wrap = document.getElementById('routeWrap')
       const newPage = wrap.children[0] as HTMLElement
       const oldPage = wrap.children[1] as HTMLElement
@@ -51,42 +62,34 @@ history.listen((() => {
   const currentRouterKey = history.location.key ? history.location.key : ''
   const oldScrollTop = window.scrollY
   const originPage = document.getElementById('routeWrap').children[0] as HTMLElement
-  const oPosition = originPage.style.position
   originPage.style.position = 'fixed'
-  originPage.style.top = -oldScrollTop + 'px'
-  setTimeout(() => {
-    originPage.style.position = oPosition
-  }, config.routeAnimationDuration)
-
-  setTimeout(() => {
+  originPage.style.top = -oldScrollTop + 'px' // 防止页面滚回顶部
+  setTimeout(() => { // 新页面已插入到旧页面之前
+    isAnimating = true
     const wrap = document.getElementById('routeWrap')
     const newPage = wrap.children[0] as HTMLElement
     const oldPage = wrap.children[1] as HTMLElement
     if (!newPage || !oldPage) {
       return
     }
-    if (newPage.className.split(' ')[0] === oldPage.className.split(' ')[0]) {
-      return
-    }
     const currentPath = history.location.pathname
 
-    const isForward = historyKeys[currentHistoryPosition + 1] === currentRouterKey
+    const isForward = historyKeys[currentHistoryPosition + 1] === currentRouterKey // 判断是否是用户点击前进按钮
 
     if (action === 'PUSH' || isForward) {
-      // oldPage.style.top = `-${oldScrollTop}px`
-      positionRecord[lastPathname] = oldScrollTop
-      window.scrollTo({ top: 0 })
+      positionRecord[lastPathname] = oldScrollTop // 根据之前记录的pathname来记录旧页面滚动位置
+      window.scrollTo({ top: 0 })  // 如果是点击前进按钮或者是history.push则滚动位置归零
 
       if (action === 'PUSH') {
         historyKeys = historyKeys.slice(0, currentHistoryPosition + 1)
-        historyKeys.push(currentRouterKey)
+        historyKeys.push(currentRouterKey) // 如果是history.push则清除无用的key
       }
     } else {
-      window.scrollTo({
+      window.scrollTo({ // 如果是点击回退按钮或者调用history.pop、history.replace则让页面滚动到之前记录的位置
         top: positionRecord[currentPath]
       })
 
-      // 删除列表路由的所有子路由滚动记录
+      // 删除滚动记录列表中所有子路由滚动记录
       for (const key in positionRecord) {
         if (key === currentPath) {
           continue
@@ -97,10 +100,12 @@ history.listen((() => {
       }
     }
 
-    if (action === 'REPLACE') {
+    if (action === 'REPLACE') { // 如果为replace则替换当前路由key为新路由key
       historyKeys[currentHistoryPosition] = currentRouterKey
     }
+    window.sessionStorage.setItem('historyKeys', JSON.stringify(historyKeys)) // 对路径key列表historyKeys的修改完毕，存储到sessionStorage中以防刷新导致丢失。
 
+    // 开始进行滑动动画
     newPage.style.width = '100%'
     oldPage.style.width = '100%'
     newPage.style.top = '0px'
@@ -109,28 +114,25 @@ history.listen((() => {
       oldPage.style.left = '0'
 
       setTimeout(() => {
-        newPage.style.transition = 'left .3s'
-        oldPage.style.transition = 'left .3s'
-        newPage.style.opacity = '1'
+        newPage.style.transition = `left ${(config.routeAnimationDuration - delay) / 1000}s`
+        oldPage.style.transition = `left ${(config.routeAnimationDuration - delay) / 1000}s`
+        newPage.style.opacity = '1' // 防止页面闪烁
         newPage.style.left = '0'
         oldPage.style.left = '-100%'
-        // newPage.style.opacity = '1'
-      }, 50)
+      }, delay)
     } else {
       newPage.style.left = '-100%'
       oldPage.style.left = '0'
       setTimeout(() => {
-        oldPage.style.transition = 'left .3s'
-        newPage.style.transition = 'left .3s'
+        oldPage.style.transition = `left ${(config.routeAnimationDuration - delay) / 1000}s`
+        newPage.style.transition = `left ${(config.routeAnimationDuration - delay) / 1000}s`
         newPage.style.left = '0'
         oldPage.style.left = '100%'
         newPage.style.opacity = '1'
-      }, 50)
+      }, delay)
     }
-    currentHistoryPosition = historyKeys.indexOf(currentRouterKey)
-
-    lastPathname = history.location.pathname
-
+    currentHistoryPosition = historyKeys.indexOf(currentRouterKey) // 记录当前history.location.key在historyKeys中的位置
+    lastPathname = history.location.pathname// 记录当前pathname作为滚动位置的键
   })
 
 }))

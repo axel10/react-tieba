@@ -287,7 +287,7 @@ class Post extends React.Component<IProps, IState> {
   private onJump = (pageNo) => {
     const { threadId } = this.props.match.params
     // debugger
-    history.push(`/p/${threadId}/${pageNo}${history.location.search}`, { noAnimate: true })
+    history.replace(`/p/${threadId}/${pageNo}${history.location.search}`, { noAnimate: true })
   }
 }
 

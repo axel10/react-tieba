@@ -57,7 +57,7 @@ class Tieba extends React.Component<IProps, IState> {
     super(props)
     // this.dispatch({type:'tieba/reset'})
     if (!this.props.tieba.tiebaInfo.title) {
-      this.dispatch({ type: 'tieba/init',title:this.props.match.params.title })
+      this.dispatch({ type: 'tieba/init',title: this.props.match.params.title })
     }
   }
 
@@ -71,7 +71,7 @@ class Tieba extends React.Component<IProps, IState> {
       isCanSign
     } = this.props.tieba.tiebaInfo
     const isFollow = levelInfo !== null
-    const {title} = this.props.match.params
+    const { title } = this.props.match.params
 
     const loading = this.props.loading.models.tieba
     const {
@@ -149,10 +149,6 @@ class Tieba extends React.Component<IProps, IState> {
                   <Button onClick={this.follow}>
                     关注
                   </Button>)}
-
-                {/*<div className={style.follow} onClick={this.follow}>
-                    关注
-                  </div>*/}
 
               </div>
             </div>

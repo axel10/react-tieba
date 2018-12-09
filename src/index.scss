@@ -6,6 +6,8 @@
     margin: 0;
     font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
     background-color: rgb(245, 245, 245);
+
+
   }
 
   ul, ol, li {
@@ -78,46 +80,6 @@
     margin: auto;
   }
 
-  .transitionLeft-enter{
-    transform:translateX(100%);
-  }
-
-  .transitionLeft-enter-active{
-    transform: translateX(0);
-  }
-
-  .transitionRight-enter{
-    transform:translateX(-100%);
-  }
-
-  .transitionRight-enter-active{
-    transform: translateX(0);
-  }
-
-  .transitionLeft-exit{
-    transform: translateX(0);
-  }
-
-
-  .transitionLeft-enter,.transitionLeft-enter-active,.transitionRight-enter,.transitionRight-enter-active{
-    z-index: 100;
-  }
-
-  .transitionLeft-exit,.transitionLeft-exit-active,.transitionRight-exit,.transitionRight-exit-active{
-    z-index: 1;
-  }
-
-  .transitionLeft-exit-active,.transitionRight-exit-active{
-    transition: all 1s ease; /*定义动画的时间和过渡效果*/
-    position: absolute;
-    width: 100%;
-  }
-  .transitionLeft-enter-active,.transitionRight-enter-active{
-    transition: all 1s ease; /*定义动画的时间和过渡效果*/
-    position: absolute;
-    width: 100%;
-  }
-
   .router-enter-active{
     position: relative;
     opacity: 0;
@@ -125,10 +87,11 @@
 
   }
   .router-exit-active{
-    position: relative;
+    position: absolute;
+    top: 0;
     z-index: 1000;
+
     //transition:left,right 2s;
   }
-
 }
 
