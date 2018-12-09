@@ -1,8 +1,8 @@
 const path = require('path');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
-const commonConfig = require('./webpack.base.js');
 const CopyWebpackPlugin = require('copy-webpack-plugin')
+const commonConfig = require('./webpack.base.js');
 
 
 module.exports = function () {
@@ -19,7 +19,8 @@ module.exports = function () {
         rewrites: [
           { from: /./, to: '/' }
         ]
-      }
+      },
+      host:'0.0.0.0'
     },
     plugins:[
       new CopyWebpackPlugin([

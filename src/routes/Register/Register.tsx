@@ -7,7 +7,7 @@ import history from 'src/history'
 import { IBaseProps } from 'src/mixin/IBaseProps'
 import { IUserState } from 'src/models/user'
 import userService from 'src/services/userService'
-import { getBindFieldObj, historyGoBack } from 'src/utils/utils'
+import { getBindFieldObj, historyGoBack, toast } from 'src/utils/utils'
 import style from '../Login/Login.scss'
 
 interface IProps extends IBaseProps {
@@ -41,11 +41,11 @@ class Register extends React.Component<IProps, IState> {
 
   private dispatch = this.props.dispatch
 
-  public componentDidMount() {
+  public componentDidMount () {
     this.setState({
       descriptor: {
         username: { required: true, message: '请输入用户名' },
-        password(rule: any, value: string, callback, source) {
+        password (rule: any, value: string, callback, source) {
           const err = []
           if (!value) {
             err.push(new Error('请输入密码'), rule.field)
@@ -59,7 +59,7 @@ class Register extends React.Component<IProps, IState> {
     })
   }
 
-  public render() {
+  public render () {
     return (
       <div className={style.LoginOrRegister}>
         <WhiteHeader
@@ -73,30 +73,30 @@ class Register extends React.Component<IProps, IState> {
         />
         <div className={style.main}>
           <div className={style.logo}>
-            <img src={require('../../assets/baidu.png')} alt="" />
+            <img src={require('../../assets/baidu.png')} alt=''/>
           </div>
           <div className={style.inputGroup}>
             <div className={style.row}>
               <input
-                name="username"
-                type="text"
-                placeholder="输入用户名"
+                name='username'
+                type='text'
+                placeholder='输入用户名'
                 onInput={this.handleFormInput}
               />
             </div>
             <div className={style.row}>
               <input
-                name="password"
-                type="password"
-                placeholder="输入密码"
+                name='password'
+                type='password'
+                placeholder='输入密码'
                 onInput={this.handleFormInput}
               />
             </div>
             <div className={style.row}>
               <input
-                name="confirmPassword"
-                type="password"
-                placeholder="确认密码"
+                name='confirmPassword'
+                type='password'
+                placeholder='确认密码'
                 onInput={this.handleFormInput}
               />
             </div>
@@ -105,14 +105,14 @@ class Register extends React.Component<IProps, IState> {
           <div
             className={`${style.submit} ${
               this.state.isAgree ? '' : style.disabled
-            }`}
+              }`}
             onClick={this.submit}
           >
             提交
           </div>
           <div className={style.confirm}>
             <label>
-              <input type="checkbox" name="isAgree" onChange={this.bindField} />
+              <input type='checkbox' name='isAgree' onChange={this.bindField}/>
               同意并阅读百度用户协议及百度隐私保护声明
             </label>
           </div>
@@ -161,6 +161,8 @@ class Register extends React.Component<IProps, IState> {
           })
           .then((o) => {
             if (o === 'true') {
+              toast('注册成功！')
+              this.dispatch({ type: 'common/setIsLogin', b: true })
               const search = qs.parse(this.props.location.search)
               if (search.fromUrl) {
                 history.push(search.fromUrl)
