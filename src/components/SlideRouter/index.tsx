@@ -17,21 +17,22 @@ const defaults = {
 
 export default class SlideRouter extends React.Component <IProps> {
 
-  public state = {}
-
   public componentDidMount (): void {
-    const { history, routeAnimationDuration, classNames = defaults.classNames,wrapId= defaults.wrapId } = this.props
+
+    const { history, routeAnimationDuration, classNames = defaults.classNames, wrapId = defaults.wrapId } = this.props
     const baseStyle = document.createElement('style')
     baseStyle.innerHTML = `
       .${classNames}-enter,.${classNames}-enter-active{
     position: relative;
     opacity: 0;
+    transition : left 1s;
   }
   .${classNames}-exit,.${classNames}-exit-active{
     position: absolute;
     top: 0;
     left: 0;
     z-index: 1000;
+        transition : left 1s;
   }
     `
     document.body.appendChild(baseStyle)
@@ -45,7 +46,6 @@ export default class SlideRouter extends React.Component <IProps> {
     let currentHistoryPosition = historyKeys.indexOf(history.location.key)
     currentHistoryPosition = currentHistoryPosition === -1 ? 0 : currentHistoryPosition
     history.listen((() => {
-      console.log('change')
       if (lastPathname === history.location.pathname) return
 
       if (!history.location.key) {  // 目标页为初始页
@@ -82,12 +82,6 @@ export default class SlideRouter extends React.Component <IProps> {
       originPage.style.top = -oldScrollTop + 'px' // 防止页面滚回顶部
       originPage.style.position = 'fixed'
       setTimeout(() => { // 新页面已插入到旧页面之前
-        console.log('animate')
-        console.log(getComputedStyle(originPage).position)
-        console.log(getComputedStyle(originPage).display)
-        console.log(getComputedStyle(originPage).top)
-        console.log(getComputedStyle(originPage).left)
-        console.log(getComputedStyle(originPage).visibility)
         isAnimating = true
         const wrap = document.getElementById(wrapId)
         const newPage = wrap.children[0] as HTMLElement
@@ -101,16 +95,14 @@ export default class SlideRouter extends React.Component <IProps> {
 
         if (action === 'PUSH' || isForward) {
           positionRecord[lastPathname] = oldScrollTop // 根据之前记录的pathname来记录旧页面滚动位置
-          window.scrollTo({ top: 0 })  // 如果是点击前进按钮或者是history.push则滚动位置归零
+          window.scrollTo(0,0)  // 如果是点击前进按钮或者是history.push则滚动位置归零
 
           if (action === 'PUSH') {
             historyKeys = historyKeys.slice(0, currentHistoryPosition + 1)
             historyKeys.push(currentRouterKey) // 如果是history.push则清除无用的key
           }
         } else {
-          window.scrollTo({ // 如果是点击回退按钮或者调用history.pop、history.replace则让页面滚动到之前记录的位置
-            top: positionRecord[currentPath]
-          })
+          window.scrollTo(0,positionRecord[currentPath])
 
           // 删除滚动记录列表中所有子路由滚动记录
           for (const key in positionRecord) {
@@ -137,20 +129,27 @@ export default class SlideRouter extends React.Component <IProps> {
           oldPage.style.left = '0'
 
           newPage.style.transition = `left ${(routeAnimationDuration - delay) / 1000}s`
+          newPage.style.webkitTransition = `left ${(routeAnimationDuration - delay) / 1000}s`
           oldPage.style.transition = `left ${(routeAnimationDuration - delay) / 1000}s`
+          oldPage.style.webkitTransition = `left ${(routeAnimationDuration - delay) / 1000}s`
 
           setTimeout(() => {
 
             newPage.style.opacity = '1' // 防止页面闪烁
             newPage.style.left = '0'
             oldPage.style.left = '-100%'
+
+            console.log(newPage.style.left)
+            console.log(oldPage.style.left)
           }, delay)
         } else {
           newPage.style.left = '-100%'
           oldPage.style.left = '0'
           setTimeout(() => {
             oldPage.style.transition = `left ${(routeAnimationDuration - delay) / 1000}s`
+            oldPage.style.webkitTransition = `left ${(routeAnimationDuration - delay) / 1000}s`
             newPage.style.transition = `left ${(routeAnimationDuration - delay) / 1000}s`
+            newPage.style.webkitTransition = `left ${(routeAnimationDuration - delay) / 1000}s`
             newPage.style.left = '0'
             oldPage.style.left = '100%'
             newPage.style.opacity = '1'
@@ -158,7 +157,6 @@ export default class SlideRouter extends React.Component <IProps> {
         }
         currentHistoryPosition = historyKeys.indexOf(currentRouterKey) // 记录当前history.location.key在historyKeys中的位置
         lastPathname = history.location.pathname// 记录当前pathname作为滚动位置的键
-        console.log('animate done')
       })
     }))
   }

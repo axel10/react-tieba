@@ -9,17 +9,16 @@ export default class Test extends React.Component {
 
   public componentDidMount (): void {
 
-    document.body.className = 'hide-scroll'
-
-/*    const div = document.createElement('div')
-    div.style.height = 2000+'px'
-    div.style.position = 'absolute'
-    document.body.appendChild(div)*/
+    setTimeout(() => {
+      const test = document.getElementById('test')
+      test.style.transition = 'left 1s'
+      test.style.left = '100' + 'px'
+    }, 50)
   }
 
   public render () {
     function MyComp (args) {
-      return(
+      return (
         <div>mycomp</div>
       )
     }
@@ -29,6 +28,11 @@ export default class Test extends React.Component {
         <Link to={'/test/1'}>
           123
         </Link>
+
+        <div
+          style={{ width: 100, height: 100, background: '#000', left: 0, position: 'relative' }}
+          id={'test'}>123
+        </div>
 
       </div>
     )
