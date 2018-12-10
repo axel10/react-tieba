@@ -14,13 +14,14 @@ interface IProps extends IBaseProps {
 
 class CommonFooter extends React.Component<IProps> {
   private dispatch = this.props.dispatch
+  private ref: HTMLElement
 
   public render () {
     const { isLogin } = this.props.common
     return (
-      <div className={style.CommonFooter}>
-        <div className={style.logo}>
-          <i className='iconfont icon-tieba' />
+      <div className={style.CommonFooter} >
+        <div className={style.logo} ref={(ref) => { this.ref = ref }}>
+          <i className='iconfont icon-tieba'/>
         </div>
         <div className={style.toast}>年轻人的潮流文化社区</div>
         <div className={style.option}>
@@ -40,6 +41,7 @@ class CommonFooter extends React.Component<IProps> {
       </div>
     )
   }
+
   private logout = () => {
     userService.logout().then(() => {
       // history.push('/')

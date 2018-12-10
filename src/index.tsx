@@ -25,7 +25,7 @@ export interface IDvaInstance extends DvaInstance {
 export const app: IDvaInstance = dva({
   history
 })
-let lastPathname = history.location.pathname
+/*let lastPathname = history.location.pathname
 const positionRecord = {}
 let isAnimating = false
 let bodyOverflowX = ''
@@ -34,6 +34,9 @@ let historyKeys = history.location.key ? [history.location.key] : ['']
 let currentHistoryPosition = historyKeys.indexOf(history.location.key)
 currentHistoryPosition = currentHistoryPosition === -1 ? 0 : currentHistoryPosition
 history.listen((() => {
+
+  if (lastPathname === history.location.pathname) return
+
   if (!history.location.key) {  // 目标页为初始页
     historyKeys[0] = ''
   }
@@ -41,10 +44,13 @@ history.listen((() => {
   if (!isAnimating) { // 如果正在进行路由动画则不改变之前记录的bodyOverflowX
     bodyOverflowX = document.body.style.overflowX
   }
+  const originPage = document.getElementById('routeWrap').children[0] as HTMLElement
+  const oPosition = originPage.style.position
   setTimeout(() => { // 动画结束后还原相关属性
     document.body.style.overflowX = bodyOverflowX
+    originPage.style.position = oPosition
     isAnimating = false
-  }, config.routeAnimationDuration + delay)
+  }, config.routeAnimationDuration + delay + 50) // 多50毫秒确保动画执行完毕
   document.body.style.overflowX = 'hidden' // 防止动画导致横向滚动条出现
 
   if (history.location.state && history.location.state.noAnimate) { // 如果指定不要发生路由动画则让新页面直接出现
@@ -61,7 +67,6 @@ history.listen((() => {
 
   const currentRouterKey = history.location.key ? history.location.key : ''
   const oldScrollTop = window.scrollY
-  const originPage = document.getElementById('routeWrap').children[0] as HTMLElement
   originPage.style.position = 'fixed'
   originPage.style.top = -oldScrollTop + 'px' // 防止页面滚回顶部
   setTimeout(() => { // 新页面已插入到旧页面之前
@@ -135,7 +140,7 @@ history.listen((() => {
     lastPathname = history.location.pathname// 记录当前pathname作为滚动位置的键
   })
 
-}))
+}))*/
 
 // 2. Plugins
 // app.use(createLoading());
