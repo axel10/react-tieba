@@ -14,15 +14,12 @@ interface ISlideTransitionProps {
   mountOnEnter?: boolean
   unmountOnExit?: boolean
   addEndListener?: EndHandler
-  onEnter?: EnterHandler
   onEntering?: EnterHandler
   onEntered?: EnterHandler
   onExit?: ExitHandler
   onExiting?: ExitHandler
   onExited?: ExitHandler
-
   [prop: string]: any
-
   children?: TransitionChildren
 }
 
