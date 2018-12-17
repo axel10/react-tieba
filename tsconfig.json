@@ -4,9 +4,10 @@
     "module": "ESNext",
     "lib": [
       "ES2017",
-      "dom"
+      "dom",
+      "esnext.asynciterable"
     ],
-    "jsx": "preserve",
+    "jsx": "react",
     "sourceMap": true,
     "removeComments": true,
     "moduleResolution": "node",

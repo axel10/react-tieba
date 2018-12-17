@@ -14,7 +14,7 @@
       "riple-equals":false,
       "no-var-requires":false,
       "no-implicit-dependencies":[true,["src"]],
-      "no-submodule-imports":[true,"src"],
+      "no-submodule-imports":false,
       "prefer-for-of":false
     },
     "rulesDirectory": []

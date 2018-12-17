@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { Route, Router, Switch } from 'react-router-dom'
-import { CSSTransition, TransitionGroup } from 'react-transition-group'
+import { Route, Router } from 'react-router-dom'
 import SlideRouter from 'src/components/SlideRouter'
 import config from 'src/utils/config'
 import history from './history'
@@ -21,19 +20,18 @@ import TieCollection from './routes/TieCollection/TieCollection'
 export const routes = () => {
   const render = () => {
     return (
-      <SlideRouter routeAnimationDuration={config.routeAnimationDuration} history={history}>
+      <SlideRouter routeAnimationDuration={config.routeAnimationDuration} history={history} transitionProps={{
+        onExited: () => {
+          console.log('done')
+        }
+      }}>
         <Route path='/test/:param?' component={Test}/>
         <Route path='/tieba/:title' component={Tieba}/>
         <Route path='/search' component={Search}/>
         <Route path='/login' component={Login}/>
         <Route path='/register' component={Register}/>
         <Route path='/newPost/:tieba' component={NewPost}/>
-        <Route
-          // path='/p/:threadId/:pageNo?/:isSeeLz?/:postId?'
-          exact={true}
-          path='/p/:threadId/:pageNo?'
-          component={Post}
-        />
+        <Route path='/p/:threadId/:pageNo?' component={Post}/>
         <Route path='/t/p/:postId' component={FollowPost}/>
         <Route path='/tc' component={TieCollection}/>
         <Route path='/home/:userName' component={Home}/>
@@ -49,30 +47,3 @@ export const routes = () => {
     </Router>
   )
 }
-
-{/*<React.Fragment>
-  <TransitionGroup id={'routeWrap'}>
-    <CSSTransition classNames={'router'} timeout={config.routeAnimationDuration} key={location.pathname}>
-      <Switch location={location}>
-        <Route path='/test/:param?' component={Test}/>
-        <Route path='/tieba/:title' component={Tieba}/>
-        <Route path='/search' component={Search}/>
-        <Route path='/login' component={Login}/>
-        <Route path='/register' component={Register}/>
-        <Route path='/newPost/:tieba' component={NewPost}/>
-        <Route
-          // path='/p/:threadId/:pageNo?/:isSeeLz?/:postId?'
-          exact={true}
-          path='/p/:threadId/:pageNo?'
-          component={Post}
-        />
-        <Route path='/t/p/:postId' component={FollowPost}/>
-        <Route path='/tc' component={TieCollection}/>
-        <Route path='/home/:userName' component={Home}/>
-        <Route path='/edituser' component={EditUser}/>
-        <Route path='/message' component={Message}/>
-        <Route path='/' component={Index}/>
-      </Switch>
-    </CSSTransition>
-  </TransitionGroup>
-</React.Fragment>*/}

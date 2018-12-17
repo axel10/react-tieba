@@ -1,6 +1,7 @@
 export default {
-  routeAnimationDuration: 350,
+  routeAnimationDuration: 3500,
   // baseUrl: 'https://localhost:44374/',
   // baseUrl: ISPROD ? 'https://api.tieba.axel10.com' : 'https://localhost:44374/'
-  baseUrl: ISPROD ? 'https://api.tieba.axel10.com' : 'http://192.168.0.5:44375/'
+  baseUrl: 'https://api.tieba.axel10.com'
+  // baseUrl: ISPROD ? 'https://api.tieba.axel10.com' : 'http://192.168.0.5:44375/'
 }

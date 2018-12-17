@@ -7,13 +7,25 @@ import tiebaService from 'src/services/tiebaService'
 
 export default class Test extends React.Component {
 
-  public componentDidMount (): void {
+  public async componentDidMount () {
+    async function* gen1 () {
+      yield 'a'
+      yield 'b'
+      return 2
+    }
 
-    setTimeout(() => {
-      const test = document.getElementById('test')
-      test.style.transition = 'left 1s'
-      test.style.left = '100' + 'px'
-    }, 50)
+    async function* gen2 () {
+// result 最终会等于 2
+      const result = yield* gen1()
+      console.log(result)
+    }
+
+    console.log('async')
+    const gen = gen2()
+    console.log(gen.next().then(o => {
+      console.log(o)
+      return gen.next()
+    }))
   }
 
   public render () {
