@@ -124,7 +124,7 @@ export default class SlideRouter extends React.Component <IProps> {
       const { action } = history
       const currentRouterKey = history.location.key ? history.location.key : ''
       const oldScrollTop = window.scrollY
-      if (action === 'POP') {
+      if (action === 'POP') { // 为POP时为了兼容qq浏览器的x5内核而进行特殊处理（x5内核下新页面会先进入文档流再触发listen函数）
         originPage.style.position = 'fixed'
         originPage.style.top = -currentScrollPosition + 'px' // 防止页面滚回顶部
       } else {
