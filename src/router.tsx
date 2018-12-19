@@ -20,11 +20,7 @@ import TieCollection from './routes/TieCollection/TieCollection'
 export const routes = () => {
   const render = () => {
     return (
-      <SlideRouter routeAnimationDuration={config.routeAnimationDuration} history={history} transitionProps={{
-        onExited: () => {
-          console.log('done')
-        }
-      }}>
+      <SlideRouter>
         <Route path='/test/:param?' component={Test}/>
         <Route path='/tieba/:title' component={Tieba}/>
         <Route path='/search' component={Search}/>

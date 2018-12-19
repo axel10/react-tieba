@@ -8,13 +8,16 @@ import {
   ExitHandler,
   TransitionChildren
 } from 'react-transition-group/Transition'
-import history from 'src/history'
-import config from 'src/utils/config'
 
-export function initRouter () {
-  const routeAnimationDuration = config.routeAnimationDuration
-  const classNames = defaults.classNames
-  const wrapId = defaults.wrapId
+export const initSlideRouter = (userSetting: IProps): void => {
+  const { history } = userSetting
+  if (!history) {
+    throw new Error('slider router history is missing')
+  }
+  settings = { ...settings, ...userSetting }
+  const routeAnimationDuration = settings.routeAnimationDuration
+  const classNames = settings.classNames
+  const wrapId = settings.wrapId
   const isRememberPosition = true
   const baseStyle = document.createElement('style')
   baseStyle.innerHTML = `
@@ -134,7 +137,7 @@ export function initRouter () {
       if (action === 'REPLACE') { // 如果为replace则替换当前路由key为新路由key
         historyKeys[currentHistoryPosition] = currentRouterKey
       }
-      window.sessionStorage.setItem('historyKeys', JSON.stringify(historyKeys)) // 对路径key列表historyKeys的修改完毕，存储到sessionStorage中以防刷新导致丢失。
+      sessionStorage.setItem('historyKeys', JSON.stringify(historyKeys)) // 对路径key列表historyKeys的修改完毕，存储到sessionStorage中以防刷新导致丢失。
 
       // 开始进行滑动动画
       newPage.style.width = '100%'
@@ -184,7 +187,6 @@ interface ISlideTransitionProps {
   onExit?: ExitHandler
   onExiting?: ExitHandler
   onExited?: ExitHandler
-
   [prop: string]: any
 
   children?: TransitionChildren
@@ -199,23 +201,23 @@ export interface IProps {
   transitionProps?: ISlideTransitionProps
 }
 
-export const defaults = {
+export let settings: IProps = {
   wrapId: 'slide-router-wrap',
   classNames: 'slide-router',
-  routeAnimationDuration: 350
+  routeAnimationDuration: 350,
+  history: null
 }
 
-export default class SlideRouter extends React.Component <IProps> {
+export default class SlideRouter extends React.Component {
 
   public render () {
-    const { wrapId = defaults.wrapId, classNames = defaults.classNames } = this.props
-    const { location } = this.props.history
-    const { routeAnimationDuration = defaults.routeAnimationDuration } = this.props
+    const { location } = settings.history
+    const { routeAnimationDuration,wrapId,classNames,transitionProps } = settings
     return (
       <React.Fragment>
         <TransitionGroup id={wrapId}>
           <CSSTransition classNames={classNames} timeout={routeAnimationDuration}
-                         key={location.key} {...this.props.transitionProps}>
+                         key={location.key} {...transitionProps}>
             <Switch location={location}>
               {this.props.children}
             </Switch>
