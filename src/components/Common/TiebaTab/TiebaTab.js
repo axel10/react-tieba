@@ -82,9 +82,9 @@ export default class TiebaTab extends React.Component {
     tabs[tabIndex].isLoaded = true;
     this.setState({ tabs });
     swiper.slideTo(tabIndex, 500, true);
-/*    setTimeout(() => {
-      this.changeStrip(currentIndex, tabIndex);
-    }); */
+    /*    setTimeout(() => {
+          this.changeStrip(currentIndex, tabIndex);
+        }); */
   };
 
   changeStrip = (currentIndex, targetIndex) => {

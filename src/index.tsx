@@ -3,6 +3,7 @@ import dva, { DvaInstance } from 'dva'
 import createLoading from 'dva-loading'
 import * as React from 'react'
 import { Dispatch } from 'redux'
+import { defaults, initRouter } from 'src/components/SlideRouter'
 import history from 'src/history'
 import common, { ICommonState } from 'src/models/common'
 import config from 'src/utils/config'
@@ -21,16 +22,12 @@ export interface IDvaInstance extends DvaInstance {
   _store?: any
 }
 
+initRouter()
+
 // 1. Initialize
 export const app: IDvaInstance = dva({
   history
 })
-
-// 2. Plugins
-// app.use(createLoading());
-
-// 3. Model
-//   app.model(m.default); // ts 导出格式包含default
 
 export let dispatch: Dispatch
 

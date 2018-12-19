@@ -1,6 +1,3 @@
-var webpack = require('webpack')
-
-
 const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
@@ -94,10 +91,6 @@ module.exports = {
       inject: true,
       hash: true,
     }),
-    new webpack.ProvidePlugin({
-      $: "jquery",
-      jQuery: "jquery"
-    })
   ],
   resolve: {
     extensions: [".js", ".json", ".jsx", ".ts", ".tsx"],
